@@ -1,0 +1,33 @@
+:root{
+  --bg:#f6f7f9; --card:#ffffff; --text:#1d2939; --muted:#667085; --line:#d0d5dd;
+  --accent:#1f3a5f; --real:#15803d; --ai:#b42318; --warn:#b54708; --warnbg:#fffaeb;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#101418; --card:#182028; --text:#e6e9ee; --muted:#9aa4b2; --line:#2c3846;
+    --accent:#8db4e8; --real:#4ade80; --ai:#f97066; --warn:#fdb022; --warnbg:#2a2110;
+  }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:680px;margin:0 auto;padding:24px 16px 40px}
+h1{font-size:1.7rem;margin:0 0 4px;color:var(--accent)}
+h2{font-size:1.4rem;margin:12px 0 2px}
+.sub{color:var(--muted);margin:0 0 16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin:12px 0}
+.card.small{font-size:.9rem;color:var(--muted)}
+.banner{background:var(--warnbg);color:var(--warn);border:1px solid var(--warn);border-radius:10px;padding:10px 14px;margin:12px 0}
+#drop{display:block;border:2px dashed var(--line);border-radius:10px;padding:28px 12px;text-align:center;cursor:pointer;color:var(--muted)}
+#drop:hover,#drop.over{border-color:var(--accent);color:var(--accent)}
+#file{display:none}
+#preview{display:block;max-width:100%;max-height:320px;margin:14px auto 0;border-radius:8px}
+.bar{height:10px;background:var(--line);border-radius:6px;overflow:hidden;position:relative}
+.bar>div{height:100%;width:0;background:var(--accent);transition:width .2s}
+.bar.big{height:16px;overflow:visible}
+.bar.big #probbar{border-radius:6px}
+#thrmark{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--text)}
+.scale{display:flex;justify-content:space-between;font-size:.8rem;color:var(--muted);margin:4px 0 0}
+#notes{padding-left:18px;color:var(--muted)}
+.error{color:var(--ai)}
+footer{text-align:center;color:var(--muted);font-size:.8rem;margin-top:20px}
+.real{color:var(--real)} .ai{color:var(--ai)} .unsure{color:var(--warn)}
