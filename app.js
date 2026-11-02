@@ -124,9 +124,9 @@ async function onFile(file) {
     console.error(e);
     fail("Sorry, I could not read that file as an image. Try a JPEG, PNG or WebP photo (iPhone HEIC photos are not supported by browsers).");
   }
-  $("droptext").textContent = "Choose another image, or drop one here";
+  $("droptext").textContent = "Choose another photo";
 }
-function fail(msg) { $("error").textContent = msg; $("error").hidden = false; $("droptext").textContent = "Choose an image, or drop one here"; }
+function fail(msg) { $("error").textContent = msg; $("error").hidden = false; $("droptext").textContent = "Choose a photo, or drop one here"; }
 
 $("file").addEventListener("change", (e) => onFile(e.target.files[0]));
 const drop = $("drop");

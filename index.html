@@ -3,16 +3,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Mazima | Is this photo real or AI-generated?</title>
+<title>MazimaCheck | Is this photo real or AI-generated?</title>
 <meta name="description" content="Check whether a photo was made by AI. The check runs inside your browser, so your photo never leaves your device.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=2">
+<link rel="stylesheet" href="style.css?v=3">
 </head>
 <body>
 <header class="top">
-  <a class="mark" href="./" aria-label="Mazima home"><span class="dot"></span>Mazima</a>
+  <a class="mark" href="./" aria-label="MazimaCheck home"><span class="dot"></span>MazimaCheck</a>
   <a class="toplink" href="#limits">How far to trust it</a>
 </header>
 
@@ -22,7 +22,7 @@
   <section class="hero">
     <div class="pitch">
       <h1>Is that photo real?</h1>
-      <p class="lead">AI can now make a convincing photo in seconds. Drop in a picture and Mazima tells you whether it looks AI-generated, and how sure it is.</p>
+      <p class="lead">AI can now make a convincing photo in seconds. Drop in a picture and MazimaCheck tells you whether it looks AI-generated, and how sure it is.</p>
       <p class="privacy">
         <svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><path d="M6 9V6.5a4 4 0 0 1 8 0V9M4.5 9h11v8h-11z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
         Your photo never leaves your phone or computer. The check runs inside your browser.
@@ -33,7 +33,7 @@
       <section id="loader" class="frame loading">
         <i class="c tl"></i><i class="c tr"></i><i class="c bl"></i><i class="c br"></i>
         <div class="loadbody">
-          <p id="loadtext">Getting Mazima ready. The first visit downloads the model (about 94 MB), so use Wi-Fi if you can.</p>
+          <p id="loadtext">Getting MazimaCheck ready. The first visit downloads the model (about 94 MB), so use Wi-Fi if you can.</p>
           <div class="bar"><div id="loadbar"></div></div>
         </div>
       </section>
@@ -65,14 +65,14 @@
     <h2 id="how-h">How it works</h2>
     <ol>
       <li><strong>Choose a photo.</strong> JPEG, PNG or WebP, up to 25 MB.</li>
-      <li><strong>Mazima looks at it.</strong> A trained model scans five patches of the picture for the faint patterns AI tools leave behind.</li>
+      <li><strong>MazimaCheck looks at it.</strong> A trained model scans five patches of the picture for the faint patterns AI tools leave behind.</li>
       <li><strong>You get a verdict.</strong> Likely real, likely AI-generated, or not sure, with the score shown so you can judge for yourself.</li>
     </ol>
   </section>
 
   <section class="limits" id="limits" aria-labelledby="limits-h">
     <h2 id="limits-h">How far to trust it</h2>
-    <p>Mazima is a screening aid, not proof. It can be wrong, including when it sounds sure, so check anything important with a second source.</p>
+    <p>MazimaCheck is a screening aid, not proof. It can be wrong, including when it sounds sure, so check anything important with a second source.</p>
     <ul>
       <li>Photos shared through WhatsApp or screenshots are squeezed and shrunk, which makes the check less reliable.</li>
       <li>Very small or heavily edited pictures are harder to judge.</li>
@@ -83,10 +83,10 @@
 </main>
 
 <footer>
-  <p>Mazima is a student research prototype from Uganda Christian University. It asks a simple question: how well do AI image detectors work on Ugandan photos?</p>
+  <p>MazimaCheck is a student research prototype from Uganda Christian University. It asks a simple question: how well do AI image detectors work on Ugandan photos?</p>
 </footer>
 
 <script src="ort/ort.wasm.min.js"></script>
-<script src="app.js"></script>
+<script src="app.js?v=3"></script>
 </body>
 </html>
