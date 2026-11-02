@@ -31,3 +31,5 @@ h2{font-size:1.4rem;margin:12px 0 2px}
 .error{color:var(--ai)}
 footer{text-align:center;color:var(--muted);font-size:.8rem;margin-top:20px}
 .real{color:var(--real)} .ai{color:var(--ai)} .unsure{color:var(--warn)}
+
+[hidden]{display:none !important}
