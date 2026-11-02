@@ -1,0 +1,14 @@
+{
+ "model": "resnet50",
+ "run": "run_F",
+ "threshold": 0.55,
+ "crop": 224,
+ "bytes": 93960275,
+ "parts": [
+  "model.onnx.part0",
+  "model.onnx.part1",
+  "model.onnx.part2",
+  "model.onnx.part3",
+  "model.onnx.part4"
+ ]
+}
