@@ -3,46 +3,89 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Real or AI? Image check</title>
+<title>Mazima | Is this photo real or AI-generated?</title>
+<meta name="description" content="Check whether a photo was made by AI. The check runs inside your browser, so your photo never leaves your device.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<header class="top">
+  <a class="mark" href="./" aria-label="Mazima home"><span class="dot"></span>Mazima</a>
+  <a class="toplink" href="#limits">How far to trust it</a>
+</header>
+
 <main>
-  <header>
-    <h1>Real or AI-generated?</h1>
-    <p class="sub">An image check. Upload a photo and the model gives a verdict and how sure it is.</p>
-  </header>
+  <div id="testbanner" class="banner" hidden><strong>Test version.</strong> This model is not trained, so the answers mean nothing. It only proves the website works.</div>
 
-  <div id="testbanner" class="banner" hidden><strong>TEST VERSION.</strong> This model is not trained, so the answers are meaningless. It only proves the website works.</div>
-
-  <section id="loader" class="card">
-    <p id="loadtext">Loading the model. This happens once per visit and can take a little while on a slow connection.</p>
-    <div class="bar"><div id="loadbar"></div></div>
-  </section>
-
-  <section id="app" class="card" hidden>
-    <label id="drop" for="file">
-      <span id="droptext">Choose an image, or drop one here</span>
-      <input id="file" type="file" accept="image/*">
-    </label>
-    <img id="preview" alt="Your image" hidden>
-    <div id="result" aria-live="polite" hidden>
-      <h2 id="verdict"></h2>
-      <p id="prob"></p>
-      <div class="bar big"><div id="probbar"></div><span id="thrmark"></span></div>
-      <p class="scale"><span>Real</span><span>AI-generated</span></p>
-      <ul id="notes"></ul>
+  <section class="hero">
+    <div class="pitch">
+      <h1>Is that photo real?</h1>
+      <p class="lead">AI can now make a convincing photo in seconds. Drop in a picture and Mazima tells you whether it looks AI-generated, and how sure it is.</p>
+      <p class="privacy">
+        <svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><path d="M6 9V6.5a4 4 0 0 1 8 0V9M4.5 9h11v8h-11z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+        Your photo never leaves your phone or computer. The check runs inside your browser.
+      </p>
     </div>
-    <p id="error" class="error" hidden></p>
+
+    <div class="stage">
+      <section id="loader" class="frame loading">
+        <i class="c tl"></i><i class="c tr"></i><i class="c bl"></i><i class="c br"></i>
+        <div class="loadbody">
+          <p id="loadtext">Getting Mazima ready. The first visit downloads the model (about 94 MB), so use Wi-Fi if you can.</p>
+          <div class="bar"><div id="loadbar"></div></div>
+        </div>
+      </section>
+
+      <section id="app" hidden>
+        <div class="frame">
+          <i class="c tl"></i><i class="c tr"></i><i class="c bl"></i><i class="c br"></i>
+          <img id="preview" alt="The photo you chose" hidden>
+          <label id="drop" for="file">
+            <span id="droptext">Choose a photo, or drop one here</span>
+            <input id="file" type="file" accept="image/*">
+          </label>
+        </div>
+
+        <p id="error" class="error" role="alert" hidden></p>
+
+        <div id="result" aria-live="polite" hidden>
+          <h2 id="verdict"></h2>
+          <p id="prob"></p>
+          <div class="bar big"><div id="probbar"></div><span id="thrmark"></span></div>
+          <p class="scale"><span>Real</span><span>AI-generated</span></p>
+          <ul id="notes"></ul>
+        </div>
+      </section>
+    </div>
   </section>
 
-  <section class="card small">
-    <p><strong>This is a screening aid, not proof.</strong> It was trained on public images and checked on a small set of phone photos taken around UCU Mukono (a pilot from one area). It looks at still images only, not video or face swaps. Heavy compression, for example after WhatsApp, makes it less reliable. A human should always double-check important decisions.</p>
-    <p><strong>Your image stays on your device.</strong> The model runs inside your browser, and nothing is uploaded or stored.</p>
-    <p>This page does not show heat maps, because our tests did not show them to be reliable.</p>
+  <section class="how" aria-labelledby="how-h">
+    <h2 id="how-h">How it works</h2>
+    <ol>
+      <li><strong>Choose a photo.</strong> JPEG, PNG or WebP, up to 25 MB.</li>
+      <li><strong>Mazima looks at it.</strong> A trained model scans five patches of the picture for the faint patterns AI tools leave behind.</li>
+      <li><strong>You get a verdict.</strong> Likely real, likely AI-generated, or not sure, with the score shown so you can judge for yourself.</li>
+    </ol>
   </section>
-  <footer>UCU Group 2 capstone prototype</footer>
+
+  <section class="limits" id="limits" aria-labelledby="limits-h">
+    <h2 id="limits-h">How far to trust it</h2>
+    <p>Mazima is a screening aid, not proof. It can be wrong, including when it sounds sure, so check anything important with a second source.</p>
+    <ul>
+      <li>Photos shared through WhatsApp or screenshots are squeezed and shrunk, which makes the check less reliable.</li>
+      <li>Very small or heavily edited pictures are harder to judge.</li>
+      <li>It looks at still images only. It does not check video or face swaps.</li>
+      <li>It does not point to the part of the picture that looks fake, because our tests showed such heat maps were not reliable.</li>
+    </ul>
+  </section>
 </main>
+
+<footer>
+  <p>Mazima is a student research prototype from Uganda Christian University. It asks a simple question: how well do AI image detectors work on Ugandan photos?</p>
+</footer>
+
 <script src="ort/ort.wasm.min.js"></script>
 <script src="app.js"></script>
 </body>
