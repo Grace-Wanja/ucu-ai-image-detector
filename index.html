@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=4">
+<link rel="stylesheet" href="style.css?v=5">
 </head>
 <body>
 <header class="top">
@@ -82,7 +82,7 @@
         <tr class="ai"><td><span class="za"></span> and above</td><td>Likely AI-generated</td><td>81% of photos scoring here were AI</td></tr>
       </tbody>
     </table>
-    <p class="fine">How we chose the cut-offs: the model's own best-guess line is 55%. We placed the uncertain zone 10 points either side of it (45% and 65%), which on the validation photos gave about 80% correct answers outside the zone. We fixed them before looking at the test photos. On photos taken from Reddit the same cut-offs were right 77% and 76% of the time, so expect somewhat less on social-media pictures.</p>
+    <p class="fine">How we chose the cut-offs: the model's own best-guess line is 55% (picked on the validation photos during training). We placed the uncertain zone 10 points either side of it (45% and 65%). That width is a judgement call, a round number that gave about 80% correct answers outside the zone on the validation photos; the table above then checks it on the test photos. A wider zone would be more accurate but would leave nearly half of all photos uncertain. On photos taken from Reddit the same cut-offs were right 77% and 76% of the time, so expect somewhat less on social-media pictures.</p>
   </section>
 
   <section class="batch" id="batch" aria-labelledby="batch-h" hidden>
@@ -132,6 +132,6 @@
 </footer>
 
 <script src="ort/ort.wasm.min.js"></script>
-<script src="app.js?v=4"></script>
+<script src="app.js?v=5"></script>
 </body>
 </html>

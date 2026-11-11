@@ -10,8 +10,8 @@ const MAX_MB = 25;
 //   AI_FROM and above           -> Likely AI-generated
 // The decision line (manifest.threshold, 0.55) sits in the middle of the uncertain zone. It is only used for the
 // plain two-way confusion matrix, so the page can be compared with the training notebook.
-// The zone edges were chosen on the validation set (not the test set): outside the uncertain zone the model was
-// about 80% right on both sides. See the table on the page for the test-set numbers.
+// The 10-point width is a judgement call: on the validation set it gave about 80% right answers outside the zone
+// (wider zones were more accurate but left nearly half the images uncertain). The page shows the test-set numbers.
 let REAL_BELOW = 0.45, AI_FROM = 0.65;
 let session = null, manifest = null;
 
