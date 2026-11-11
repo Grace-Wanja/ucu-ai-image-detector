@@ -8,12 +8,12 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=3">
+<link rel="stylesheet" href="style.css?v=4">
 </head>
 <body>
 <header class="top">
   <a class="mark" href="./" aria-label="MazimaCheck home"><span class="dot"></span>MazimaCheck</a>
-  <a class="toplink" href="#limits">How far to trust it</a>
+  <nav class="topnav"><a class="toplink" href="#zones">Reading the score</a><a class="toplink" href="#batch">Batch test</a><a class="toplink" href="#limits">Limits</a></nav>
 </header>
 
 <main>
@@ -53,8 +53,9 @@
         <div id="result" aria-live="polite" hidden>
           <h2 id="verdict"></h2>
           <p id="prob"></p>
-          <div class="bar big"><div id="probbar"></div><span id="thrmark"></span></div>
-          <p class="scale"><span>Real</span><span>AI-generated</span></p>
+          <div class="meter" aria-hidden="true"><i id="zreal" class="seg real"></i><i id="zunsure" class="seg unsure"></i><i id="zai" class="seg ai"></i><span id="pin"></span></div>
+          <div class="ticks" aria-hidden="true"><span id="tick1"></span><span id="tick2"></span></div>
+          <p class="scale"><span>Likely real</span><span>Uncertain</span><span>Likely AI</span></p>
           <ul id="notes"></ul>
         </div>
       </section>
@@ -66,8 +67,52 @@
     <ol>
       <li><strong>Choose a photo.</strong> JPEG, PNG or WebP, up to 25 MB.</li>
       <li><strong>MazimaCheck looks at it.</strong> A trained model scans five patches of the picture for the faint patterns AI tools leave behind.</li>
-      <li><strong>You get a verdict.</strong> Likely real, likely AI-generated, or not sure, with the score shown so you can judge for yourself.</li>
+      <li><strong>You get a verdict.</strong> The AI score decides it: under <span class="zr"></span> is likely real, <span class="zr"></span> up to <span class="za"></span> is uncertain, <span class="za"></span> and above is likely AI-generated.</li>
     </ol>
+  </section>
+
+  <section class="zones" id="zones" aria-labelledby="zones-h">
+    <h2 id="zones-h">Reading the score</h2>
+    <p>Every photo gets an <strong>AI score</strong> from 0% to 100%: the model's estimated chance that the photo is AI-generated. The verdict follows fixed cut-offs, so the same score always gives the same verdict.</p>
+    <table class="zt">
+      <thead><tr><th>AI score</th><th>Verdict</th><th>How often it was right on our 941 test photos</th></tr></thead>
+      <tbody>
+        <tr class="real"><td>below <span class="zr"></span></td><td>Likely real</td><td>79% of photos scoring here were real</td></tr>
+        <tr class="unsure"><td><span class="zr"></span> to under <span class="za"></span></td><td>Uncertain</td><td>Close to a coin toss: 62% were AI and 38% real. About 35% of photos land here.</td></tr>
+        <tr class="ai"><td><span class="za"></span> and above</td><td>Likely AI-generated</td><td>81% of photos scoring here were AI</td></tr>
+      </tbody>
+    </table>
+    <p class="fine">How we chose the cut-offs: the model's own best-guess line is 55%. We placed the uncertain zone 10 points either side of it (45% and 65%), which on the validation photos gave about 80% correct answers outside the zone. We fixed them before looking at the test photos. On photos taken from Reddit the same cut-offs were right 77% and 76% of the time, so expect somewhat less on social-media pictures.</p>
+  </section>
+
+  <section class="batch" id="batch" aria-labelledby="batch-h" hidden>
+    <h2 id="batch-h">Batch test</h2>
+    <p>For evaluators: check a whole set of photos automatically. Choose a folder (or many files), press Start, and MazimaCheck scores every image and draws the confusion matrix. Your photos still stay on your device.</p>
+    <p class="fine">Labels are read from a <code>labels.csv</code> (columns <code>filename,label</code>, optional <code>role,generator,p_fake</code>) or from folders named <code>real</code> and <code>ai</code>. To use the same test set as our training notebook, run the export cell in the notebook and choose the folder it makes.</p>
+    <div class="bpick">
+      <label class="btn">Choose a folder<input id="bfolder" type="file" webkitdirectory multiple hidden></label>
+      <label class="btn alt">Or choose files (add labels.csv too)<input id="bfiles" type="file" multiple accept="image/*,.csv" hidden></label>
+    </div>
+    <p id="bfound" class="fine" hidden></p>
+    <div class="brow">
+      <label>Check at most <input id="blimit" type="number" min="1" value="1"> images (a random but repeatable sample if fewer than the total)</label>
+      <button id="brun" class="btn go" disabled>Start</button>
+      <button id="bstop" class="btn alt" hidden>Stop</button>
+    </div>
+    <div id="bprog" hidden><div class="bar"><div id="bbar"></div></div><p id="btext" class="fine"></p></div>
+    <div id="bresults" hidden>
+      <div id="bsum" class="sumrow"></div>
+      <div id="bcm" class="cmwrap">
+        <div><h3>Confusion matrix at the 0.55 decision line</h3><p class="fine">Two answers only, so it can be compared with the notebook.</p><div id="cm2"></div></div>
+        <div><h3>What users see: three verdicts</h3><p class="fine">Green cells are right answers, orange cells are mistakes. The middle column is "Uncertain".</p><div id="cm3"></div></div>
+      </div>
+      <div id="bgroups"></div>
+      <p id="bparity" class="fine" hidden></p>
+      <p id="bunread" class="fine" hidden></p>
+      <div class="brow"><label><input id="bwrong" type="checkbox"> Show only wrong or uncertain rows</label><button id="bdl" class="btn alt">Download all results (CSV)</button></div>
+      <div class="tablewrap"><table id="btable" class="rt"></table></div>
+      <p id="bmore" class="fine"></p>
+    </div>
   </section>
 
   <section class="limits" id="limits" aria-labelledby="limits-h">
@@ -87,6 +132,6 @@
 </footer>
 
 <script src="ort/ort.wasm.min.js"></script>
-<script src="app.js?v=3"></script>
+<script src="app.js?v=4"></script>
 </body>
 </html>
