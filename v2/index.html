@@ -5,14 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>MazimaCheck</title>
 <meta name="description" content="Check a photo or video before you trust it. Everything runs on your device.">
-<meta name="theme-color" content="#eef1ec">
+<meta name="theme-color" content="#0d5c2e">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=3">
+<link rel="stylesheet" href="style.css?v=4">
 </head>
 <body>
 <a class="skip" href="#main">Skip to the app</a>
@@ -38,7 +38,8 @@
 
 <!-- ============================== PHOTO ============================== -->
 <section id="v-photo" class="view">
-  <div id="p-empty" class="hero">
+  <div id="p-empty">
+   <div class="hband hero">
     <div class="herotext">
       <p class="badge"><i></i>Runs on your device. Your photo is never uploaded.</p>
       <h1>Is that photo <span class="mark">real?</span></h1>
@@ -49,12 +50,13 @@
       <div class="dropinner">
         <div class="dropbtns">
           <label class="pill gold">Choose a photo<input id="file" type="file" accept="image/*" hidden></label>
-          <label class="pill line">Take a photo<input id="cam" type="file" accept="image/*" capture="environment" hidden></label>
+          <label class="pill line touchonly">Take a photo<input id="cam" type="file" accept="image/*" capture="environment" hidden></label>
         </div>
         <p class="hint" id="droptext">You can also drop a photo here or paste one.</p>
         <p id="error" class="error" role="alert" hidden></p>
       </div>
     </div>
+   </div>
     <dl class="strip">
       <div><dt>Tested on</dt><dd>941 <small>images</small></dd></div>
       <div><dt>Verdicts</dt><dd>3 <small>real, uncertain, AI</small></dd></div>
@@ -106,12 +108,14 @@
 
 <!-- ============================== VIDEO ============================== -->
 <section id="v-video" class="view" hidden>
+  <div class="hband">
   <h1>Check a <span class="mark">video</span></h1>
   <p class="lede">MazimaCheck pulls still frames from the clip, scores each one, and draws the score across time so you can see where it rises.</p>
+  </div>
   <p class="caution">First version. The current model learned from fully AI-generated images, not face swaps, and video compression weakens it. Treat the timeline as a pointer for a closer look, not a verdict. A face model is the next thing being trained.</p>
   <div class="dropbtns">
     <label class="pill gold">Choose a video<input id="vfile" type="file" accept="video/*" hidden></label>
-    <label class="pill line">Record a clip<input id="vcam" type="file" accept="video/*" capture="environment" hidden></label>
+    <label class="pill line touchonly">Record a clip<input id="vcam" type="file" accept="video/*" capture="environment" hidden></label>
     <label class="inline">Frames to check <select id="vcount"><option>8</option><option selected>16</option><option>32</option></select></label>
   </div>
   <p id="verror" class="error" role="alert" hidden></p>
@@ -134,8 +138,10 @@
 
 <!-- ============================== LAB ============================== -->
 <section id="v-lab" class="view" hidden>
+  <div class="hband">
   <h1>The <span class="mark">lab</span></h1>
   <p class="lede">Two tests for people who want to know how far to trust the detector.</p>
+  </div>
 
   <div class="panel">
     <h2>Chat-app stress test</h2>
@@ -181,8 +187,10 @@
 
 <!-- ============================== HISTORY ============================== -->
 <section id="v-history" class="view" hidden>
+  <div class="hband">
   <h1>Your <span class="mark">history</span></h1>
   <p class="lede">Checks you have run on this device. Nothing here is sent anywhere, and only a small thumbnail is kept.</p>
+  </div>
   <div class="brow"><button id="hexport" class="pill line">Download as CSV</button><button id="hclear" class="pill line danger">Clear history</button></div>
   <p id="hempty" class="hint">No checks yet. Your first photo or video check will appear here.</p>
   <div id="hlist" class="hlist"></div>
@@ -190,8 +198,10 @@
 
 <!-- ============================== ABOUT ============================== -->
 <section id="v-about" class="view" hidden>
+  <div class="hband">
   <h1>How far to <span class="mark">trust it</span></h1>
   <p class="lede">MazimaCheck is a student research project from Uganda Christian University. It asks how well AI-image detectors hold up on photos like the ones Ugandans share.</p>
+  </div>
 
   <div class="panel">
     <h2>Reading the score</h2>
