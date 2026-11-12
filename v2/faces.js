@@ -58,3 +58,44 @@ async function detectFaces(bmp, minScore = FACE_MIN) {
     return { x, y, w: Math.min(bmp.width - x, f.w / sc), h: Math.min(bmp.height - y, f.h / sc), score: f.score };
   }).filter((f) => f.w > 2 && f.h > 2);
 }
+
+// ---- forged-face check: only active once a trained model is published at faces/forged_manifest.json -------------
+// The manifest says which ONNX file to load, how a face is cut out (padding, size) and where the verdict zones are.
+let forgedNet = null, forgedInfo = null;
+async function cachedGet(url) {
+  const store = ("caches" in window) ? await caches.open("mz-model").catch(() => null) : null;
+  let r = await fetch(url, { cache: "no-cache" }).catch(() => null);
+  if (r && r.ok) { if (store) store.put(url, r.clone()).catch(() => {}); return r; }
+  return store ? await store.match(url) : null;
+}
+async function loadForged() {
+  const m = await cachedGet(new URL("faces/forged_manifest.json", document.baseURI).href);
+  if (!m) return;                                                           // no model published yet: no per-face verdict
+  forgedInfo = await m.json();
+  const url = new URL("faces/" + forgedInfo.onnx, document.baseURI).href;
+  const store = ("caches" in window) ? await caches.open("mz-model").catch(() => null) : null;
+  let r = store ? await store.match(url) : null;
+  if (!r) { r = await fetch(url); if (!r.ok) throw new Error("forged-face model download failed"); if (store) store.put(url, r.clone()).catch(() => {}); }
+  forgedNet = await ort.InferenceSession.create(new Uint8Array(await r.arrayBuffer()), { executionProviders: ["wasm"] });
+}
+function faceVerdict(p) {
+  if (p == null || !forgedInfo) return null;
+  return p < forgedInfo.zones.real_below ? "real" : (p >= forgedInfo.zones.forged_from ? "forged" : "uncertain");
+}
+// Cut the face the way training did (box plus padding, squashed to size x size) and return P(forged), or null.
+async function scoreFace(bmp, f) {
+  if (!forgedNet) return null;
+  const S = forgedInfo.crop.size, pad = forgedInfo.crop.pad;
+  const x0 = Math.max(0, f.x - pad * f.w), y0 = Math.max(0, f.y - pad * f.h);
+  const x1 = Math.min(bmp.width, f.x + f.w + pad * f.w), y1 = Math.min(bmp.height, f.y + f.h + pad * f.h);
+  const c = document.createElement("canvas"); c.width = c.height = S;
+  const g = c.getContext("2d", { willReadFrequently: true }); g.imageSmoothingQuality = "high";
+  g.drawImage(bmp, x0, y0, x1 - x0, y1 - y0, 0, 0, S, S);
+  const px = g.getImageData(0, 0, S, S).data, N = S * S, data = new Float32Array(3 * N);
+  for (let i = 0; i < N; i++) for (let k = 0; k < 3; k++) data[k * N + i] = (px[i * 4 + k] / 255 - MEAN[k]) / STD[k];
+  const out = await enqueue(() => forgedNet.run({ input: new ort.Tensor("float32", data, [1, 3, S, S]) }));
+  return sigmoid(out.logit.data[0]);
+}
+async function scoreFaces(bmp, faces, max = 12) {
+  for (const f of faces.slice(0, max)) { try { f.p = await scoreFace(bmp, f); } catch (e) { console.warn(e); f.p = null; } }
+}

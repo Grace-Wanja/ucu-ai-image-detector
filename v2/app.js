@@ -24,6 +24,7 @@ function startModel() {
     $("modelstate").textContent = fromDevice ? "Opening the saved model" : `Downloading the model, ${Math.round(100 * frac)}%`;
   }).then(async (info) => {
     await loadFaces().catch((e) => console.warn("face finder unavailable", e));
+    await loadForged().catch((e) => console.warn("forged-face model unavailable", e));
     $("modelstate").textContent = info.fromDevice ? "Model ready (saved on this device)" : "Model ready and saved for next time";
     $("statefill").style.width = "100%";
     drawGauge();
@@ -63,6 +64,7 @@ async function onPhoto(file) {
     await modelReady;
     const result = await analyseFile(file, true);
     const faces = await detectFaces(result.bmp).catch((e) => { console.warn(e); return []; });
+    await scoreFaces(result.bmp, faces);
     if (current && current.bmp && current.bmp.close) current.bmp.close();
     current = { file, bmp: result.bmp, result, faces, map: null, name: file.name || "pasted photo" };
     renderPhoto();
@@ -116,10 +118,19 @@ function renderFaces() {
     $("facetext").textContent = "No faces found. Small or turned-away faces can be missed.";
     $("facelist").innerHTML = ""; return;
   }
-  $("facetext").textContent = `${faces.length} ${faces.length === 1 ? "face" : "faces"} found. A face-level forgery check is still being trained, so these faces do not have their own score yet.`;
+  const nf = faces.length === 1 ? "face" : "faces";
+  if (forgedNet) {
+    const v = faces.map((f) => faceVerdict(f.p)), bad = v.filter((x) => x === "forged").length, unsure = v.filter((x) => x === "uncertain").length;
+    $("facetext").textContent = `${faces.length} ${nf} found. ${bad} read as likely forged, ${unsure} uncertain. This face model learned from one dataset, so treat each score as a pointer for a closer look, not proof.` + (faces.length > 12 ? " Only the first 12 were scored." : "");
+  } else $("facetext").textContent = `${faces.length} ${nf} found. A face-level forgery check is still being trained, so these faces do not have their own score yet.`;
   const shown = faces.slice(0, 12);
-  $("facelist").innerHTML = shown.map((f, i) => `<figure class="face"><img src="${faceCrop(current.bmp, f)}" alt="Face ${i + 1}"><b>Face ${i + 1}</b><br>${Math.round(f.w)} x ${Math.round(f.h)} px${Math.min(f.w, f.h) < 64 ? ", small" : ""}</figure>`).join("") + (faces.length > shown.length ? `<p class="small">Showing the first ${shown.length}. All ${faces.length} are boxed on the photo.</p>` : "");
+  $("facelist").innerHTML = shown.map((f, i) => `<figure class="face"><img src="${faceCrop(current.bmp, f)}" alt="Face ${i + 1}"><b>Face ${i + 1}</b><br>${Math.round(f.w)} x ${Math.round(f.h)} px${Math.min(f.w, f.h) < 64 ? ", small" : ""}${faceChip(f)}</figure>`).join("") + (faces.length > shown.length ? `<p class="small">Showing the first ${shown.length}. All ${faces.length} are boxed on the photo.</p>` : "");
   drawFaces();
+}
+const FACECOL = { real: "#17803D", forged: "#C4161C", uncertain: "#F5B800" };
+function faceChip(f) {
+  const v = faceVerdict(f.p); if (!v) return "";
+  return `<br><span class="tag ${{ real: "real", forged: "ai", uncertain: "unsure" }[v]}">${{ real: "Likely real", forged: "Likely forged", uncertain: "Uncertain" }[v]} ${(100 * f.p).toFixed(0)}%</span>`;
 }
 function drawFaces() {
   const faces = current && current.faces, img = $("preview");
@@ -127,9 +138,10 @@ function drawFaces() {
   const { g, w } = placeOverlay($("facecanvas")), k = w / current.bmp.width;
   g.lineWidth = 2.5; g.font = "700 13px Figtree, sans-serif"; g.textBaseline = "middle";
   faces.forEach((f, i) => {
-    g.strokeStyle = "#F5B800"; g.strokeRect(f.x * k, f.y * k, f.w * k, f.h * k);
+    const col = FACECOL[faceVerdict(f.p)] || "#F5B800";
+    g.strokeStyle = col; g.strokeRect(f.x * k, f.y * k, f.w * k, f.h * k);
     const tx = f.x * k, ty = Math.max(0, f.y * k - 20);
-    g.fillStyle = "#F5B800"; g.fillRect(tx, ty, 22, 20); g.fillStyle = "#07361F"; g.fillText(String(i + 1), tx + 7, ty + 10.5);
+    g.fillStyle = col; g.fillRect(tx, ty, 22, 20); g.fillStyle = col === "#F5B800" ? "#07361F" : "#fff"; g.fillText(String(i + 1), tx + 7, ty + 10.5);
   });
 }
 
@@ -270,11 +282,13 @@ async function onVideo(file) {
       const bmp = await createImageBitmap(c);
       const { p } = await scoreBitmap(bmp);
       const faces = await detectFaces(bmp).catch(() => []);
+      await scoreFaces(bmp, faces, 6);
       if (run !== vRun) { bmp.close && bmp.close(); break; }
-      const pt = { t, p, faces: faces.length, thumb: thumbOf(bmp, 184, faces) }; bmp.close && bmp.close();
+      const fp = faces.map((x) => x.p).filter((x) => x != null), worst = fp.length ? Math.max(...fp) : null;
+      const pt = { t, p, faces: faces.length, worst, thumb: thumbOf(bmp, 184, faces) }; bmp.close && bmp.close();
       vPoints.push(pt); drawChart(dur);
       const v = verdictFor(p), b = document.createElement("button");
-      b.className = VCLASS[v]; b.innerHTML = `<img src="${pt.thumb}" alt="Frame at ${t.toFixed(1)} seconds">${t.toFixed(1)} s, ${(100 * p).toFixed(0)}%<small>${faces.length} ${faces.length === 1 ? "face" : "faces"}</small>`;
+      b.className = VCLASS[v]; b.innerHTML = `<img src="${pt.thumb}" alt="Frame at ${t.toFixed(1)} seconds">${t.toFixed(1)} s, ${(100 * p).toFixed(0)}%<small>${faces.length} ${faces.length === 1 ? "face" : "faces"}${worst != null ? ", top face " + (100 * worst).toFixed(0) + "%" : ""}</small>`;
       b.addEventListener("click", () => { video.currentTime = t; });
       $("vframes").appendChild(b);
       $("vstate").textContent = `Checked frame ${i + 1} of ${n}`;
@@ -288,7 +302,8 @@ async function onVideo(file) {
     $("vscore").innerHTML = `<span>${(100 * mean).toFixed(1)}%</span> average AI score over ${ps.length} frames`;
     const withFaces = vPoints.filter((x) => x.faces > 0).length, most = Math.max(...vPoints.map((x) => x.faces));
     $("vvwhy").textContent = `${hot} of ${ps.length} frames read as likely AI. Highest frame ${(100 * Math.max(...ps)).toFixed(0)}%, lowest ${(100 * Math.min(...ps)).toFixed(0)}%. ` +
-      (faceSession ? (withFaces ? `Faces were found in ${withFaces} of ${ps.length} frames (up to ${most} at once).` : "No faces were found in these frames.") : "");
+      (faceSession ? (withFaces ? `Faces were found in ${withFaces} of ${ps.length} frames (up to ${most} at once).` : "No faces were found in these frames.") : "") +
+      (forgedNet && withFaces ? ` A face read as likely forged in ${vPoints.filter((x) => x.worst != null && faceVerdict(x.worst) === "forged").length} frames.` : "");
     $("vstate").textContent = run === vRun ? "Done" : "Stopped";
     saveHistory({ kind: "video", name: file.name || "recorded clip", p: mean, verdict: v, w: video.videoWidth, h: video.videoHeight, thumb: vPoints[Math.floor(vPoints.length / 2)].thumb });
   } catch (e) {
