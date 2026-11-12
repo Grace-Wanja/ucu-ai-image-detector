@@ -22,7 +22,8 @@ function startModel() {
   modelReady = loadModel((frac, fromDevice) => {
     $("statefill").style.width = Math.round(100 * frac) + "%";
     $("modelstate").textContent = fromDevice ? "Opening the saved model" : `Downloading the model, ${Math.round(100 * frac)}%`;
-  }).then((info) => {
+  }).then(async (info) => {
+    await loadFaces().catch((e) => console.warn("face finder unavailable", e));
     $("modelstate").textContent = info.fromDevice ? "Model ready (saved on this device)" : "Model ready and saved for next time";
     $("statefill").style.width = "100%";
     drawGauge();
@@ -61,8 +62,9 @@ async function onPhoto(file) {
   try {
     await modelReady;
     const result = await analyseFile(file, true);
+    const faces = await detectFaces(result.bmp).catch((e) => { console.warn(e); return []; });
     if (current && current.bmp && current.bmp.close) current.bmp.close();
-    current = { file, bmp: result.bmp, result, map: null, name: file.name || "pasted photo" };
+    current = { file, bmp: result.bmp, result, faces, map: null, name: file.name || "pasted photo" };
     renderPhoto();
     fileFacts(file).then((f) => renderFacts(f)).catch(() => renderFacts({ exif: {}, credentials: false }));
     saveHistory({ kind: "photo", name: current.name, p: result.p, verdict: result.label, w: result.width, h: result.height, thumb: thumbOf(result.bmp) });
@@ -87,8 +89,48 @@ function renderPhoto() {
     : "In this range the model was right barely more often than a coin toss.";
   $("pin").style.left = (100 * r.p) + "%"; $("pinval").textContent = (100 * r.p).toFixed(0) + "%";
   $("notes").innerHTML = r.notes.map((n) => `<li>${esc(n)}</li>`).join("");
+  renderFaces();
   $("facts").innerHTML = "";
   $("droptext").textContent = "You can also drop a photo here or paste one.";
+}
+
+/* ---------------- faces ---------------- */
+function placeOverlay(c) {
+  const img = $("preview"), w = img.clientWidth, h = img.clientHeight, dpr = window.devicePixelRatio || 1;
+  c.style.width = w + "px"; c.style.height = h + "px"; c.style.left = img.offsetLeft + "px"; c.style.top = img.offsetTop + "px";
+  c.width = Math.round(w * dpr); c.height = Math.round(h * dpr);
+  const g = c.getContext("2d"); g.scale(dpr, dpr); return { g, w, h };
+}
+function faceCrop(bmp, f, height = 84) {
+  const pad = 0.2, x = Math.max(0, f.x - pad * f.w), y = Math.max(0, f.y - pad * f.h);
+  const w = Math.min(bmp.width - x, f.w * (1 + 2 * pad)), h = Math.min(bmp.height - y, f.h * (1 + 2 * pad));
+  const c = document.createElement("canvas"); c.height = height * 2; c.width = Math.max(1, Math.round(height * 2 * w / h));
+  c.getContext("2d").drawImage(bmp, x, y, w, h, 0, 0, c.width, c.height);
+  return c.toDataURL("image/jpeg", 0.8);
+}
+function renderFaces() {
+  const faces = current.faces || [], c = $("facecanvas");
+  c.width = c.height = 0;
+  if (!faceSession) { $("facetext").textContent = "The face finder did not load, so faces were not looked for."; $("facelist").innerHTML = ""; return; }
+  if (!faces.length) {
+    $("facetext").textContent = "No faces found. Small or turned-away faces can be missed.";
+    $("facelist").innerHTML = ""; return;
+  }
+  $("facetext").textContent = `${faces.length} ${faces.length === 1 ? "face" : "faces"} found. A face-level forgery check is still being trained, so these faces do not have their own score yet.`;
+  const shown = faces.slice(0, 12);
+  $("facelist").innerHTML = shown.map((f, i) => `<figure class="face"><img src="${faceCrop(current.bmp, f)}" alt="Face ${i + 1}"><b>Face ${i + 1}</b><br>${Math.round(f.w)} x ${Math.round(f.h)} px${Math.min(f.w, f.h) < 64 ? ", small" : ""}</figure>`).join("") + (faces.length > shown.length ? `<p class="small">Showing the first ${shown.length}. All ${faces.length} are boxed on the photo.</p>` : "");
+  drawFaces();
+}
+function drawFaces() {
+  const faces = current && current.faces, img = $("preview");
+  if (!faces || !faces.length || !img.clientWidth) return;
+  const { g, w } = placeOverlay($("facecanvas")), k = w / current.bmp.width;
+  g.lineWidth = 2.5; g.font = "700 13px Figtree, sans-serif"; g.textBaseline = "middle";
+  faces.forEach((f, i) => {
+    g.strokeStyle = "#F5B800"; g.strokeRect(f.x * k, f.y * k, f.w * k, f.h * k);
+    const tx = f.x * k, ty = Math.max(0, f.y * k - 20);
+    g.fillStyle = "#F5B800"; g.fillRect(tx, ty, 22, 20); g.fillStyle = "#07361F"; g.fillText(String(i + 1), tx + 7, ty + 10.5);
+  });
 }
 
 function renderFacts(f) {
@@ -147,9 +189,9 @@ async function toggleMap() {
   drawMap(); $("mapbtn").textContent = "Hide the suspicion map"; $("maplegend").hidden = false;
 }
 $("mapbtn").addEventListener("click", () => toggleMap().catch((e) => { console.error(e); $("mapbtn").disabled = false; $("mapstate").textContent = "The map could not be drawn for this photo."; }));
-window.addEventListener("resize", () => { if ($("mapcanvas").width) drawMap(); });
+window.addEventListener("resize", () => { if ($("mapcanvas").width) drawMap(); if (current && $("facecanvas").width) drawFaces(); });
 
-["file", "cam", "file2"].forEach((id) => $(id).addEventListener("change", (e) => { onPhoto(e.target.files[0]); e.target.value = ""; }));
+["file", "file2"].forEach((id) => $(id).addEventListener("change", (e) => { onPhoto(e.target.files[0]); e.target.value = ""; }));
 const drop = $("drop");
 ["dragenter", "dragover"].forEach((t) => document.addEventListener(t, (e) => { e.preventDefault(); drop.classList.add("over"); }));
 ["dragleave", "drop"].forEach((t) => document.addEventListener(t, (e) => { e.preventDefault(); drop.classList.remove("over"); }));
@@ -227,11 +269,12 @@ async function onVideo(file) {
       g.drawImage(video, 0, 0);
       const bmp = await createImageBitmap(c);
       const { p } = await scoreBitmap(bmp);
+      const faces = await detectFaces(bmp).catch(() => []);
       if (run !== vRun) { bmp.close && bmp.close(); break; }
-      const pt = { t, p, thumb: thumbOf(bmp, 184) }; bmp.close && bmp.close();
+      const pt = { t, p, faces: faces.length, thumb: thumbOf(bmp, 184, faces) }; bmp.close && bmp.close();
       vPoints.push(pt); drawChart(dur);
       const v = verdictFor(p), b = document.createElement("button");
-      b.className = VCLASS[v]; b.innerHTML = `<img src="${pt.thumb}" alt="Frame at ${t.toFixed(1)} seconds">${t.toFixed(1)} s, ${(100 * p).toFixed(0)}%`;
+      b.className = VCLASS[v]; b.innerHTML = `<img src="${pt.thumb}" alt="Frame at ${t.toFixed(1)} seconds">${t.toFixed(1)} s, ${(100 * p).toFixed(0)}%<small>${faces.length} ${faces.length === 1 ? "face" : "faces"}</small>`;
       b.addEventListener("click", () => { video.currentTime = t; });
       $("vframes").appendChild(b);
       $("vstate").textContent = `Checked frame ${i + 1} of ${n}`;
@@ -243,7 +286,9 @@ async function onVideo(file) {
     $("vverdictbox").className = "verdict " + VCLASS[v];
     $("vverdict").textContent = { "real": "Frame scores are mostly low", "AI-generated": "Frame scores are mostly high", "uncertain": "Frame scores are mixed" }[v];
     $("vscore").innerHTML = `<span>${(100 * mean).toFixed(1)}%</span> average AI score over ${ps.length} frames`;
-    $("vvwhy").textContent = `${hot} of ${ps.length} frames read as likely AI. Highest frame ${(100 * Math.max(...ps)).toFixed(0)}%, lowest ${(100 * Math.min(...ps)).toFixed(0)}%.`;
+    const withFaces = vPoints.filter((x) => x.faces > 0).length, most = Math.max(...vPoints.map((x) => x.faces));
+    $("vvwhy").textContent = `${hot} of ${ps.length} frames read as likely AI. Highest frame ${(100 * Math.max(...ps)).toFixed(0)}%, lowest ${(100 * Math.min(...ps)).toFixed(0)}%. ` +
+      (faceSession ? (withFaces ? `Faces were found in ${withFaces} of ${ps.length} frames (up to ${most} at once).` : "No faces were found in these frames.") : "");
     $("vstate").textContent = run === vRun ? "Done" : "Stopped";
     saveHistory({ kind: "video", name: file.name || "recorded clip", p: mean, verdict: v, w: video.videoWidth, h: video.videoHeight, thumb: vPoints[Math.floor(vPoints.length / 2)].thumb });
   } catch (e) {
@@ -272,15 +317,17 @@ $("vchart").addEventListener("click", (e) => {
   const near = vPoints.reduce((a, b) => (Math.abs(c._x(b.t) - px) < Math.abs(c._x(a.t) - px) ? b : a));
   $("vplayer").currentTime = near.t;
 });
-["vfile", "vcam"].forEach((id) => $(id).addEventListener("change", (e) => { onVideo(e.target.files[0]); e.target.value = ""; }));
+["vfile"].forEach((id) => $(id).addEventListener("change", (e) => { onVideo(e.target.files[0]); e.target.value = ""; }));
 $("vstop").addEventListener("click", () => { vRun++; $("vstate").textContent = "Stopped"; $("vstop").hidden = true; });
 
 /* ---------------- history (kept on this device only) ---------------- */
 const HKEY = "mz-history-v1";
-function thumbOf(bmp, size = 128) {
+function thumbOf(bmp, size = 128, faces = []) {
   const k = size / Math.max(bmp.width, bmp.height), c = document.createElement("canvas");
   c.width = Math.max(1, Math.round(bmp.width * k)); c.height = Math.max(1, Math.round(bmp.height * k));
-  c.getContext("2d").drawImage(bmp, 0, 0, c.width, c.height);
+  const g = c.getContext("2d"); g.drawImage(bmp, 0, 0, c.width, c.height);
+  g.strokeStyle = "#F5B800"; g.lineWidth = 2;
+  faces.forEach((f) => g.strokeRect(f.x * k, f.y * k, f.w * k, f.h * k));
   return c.toDataURL("image/jpeg", 0.6);
 }
 function readHistory() { try { return JSON.parse(localStorage.getItem(HKEY) || "[]"); } catch (e) { return []; } }

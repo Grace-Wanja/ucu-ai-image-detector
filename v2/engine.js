@@ -95,10 +95,9 @@ function toTensor(crops) {
 
 // ---- inference: one job at a time, because the runtime cannot run two at once ----------------------------
 let queue = Promise.resolve();
+function enqueue(fn) { const job = queue.then(fn); queue = job.catch(() => {}); return job; }
 function runModel(crops) {
-  const job = queue.then(async () => Array.from((await session.run({ input: toTensor(crops) })).logit.data));
-  queue = job.catch(() => {});
-  return job;
+  return enqueue(async () => Array.from((await session.run({ input: toTensor(crops) })).logit.data));
 }
 async function scoreBitmap(bmp) {
   const logits = await runModel(fiveCrops(bmp));
