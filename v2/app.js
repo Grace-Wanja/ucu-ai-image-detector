@@ -2,6 +2,7 @@
 const VCLASS = { "real": "real", "AI-generated": "ai", "uncertain": "unsure" };
 const VTEXT = { "real": "Likely real", "AI-generated": "Likely AI-generated", "uncertain": "Uncertain" };
 const esc = (t) => String(t).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const css = (v) => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
 let current = null;            // the photo on the desk: { file, bmp, result, map }
 let modelReady = null;
 
@@ -105,7 +106,7 @@ function renderFacts(f) {
 }
 
 /* ---------------- suspicion map ---------------- */
-function tileColour(p) { return p < REAL_BELOW ? "76,194,122" : (p >= AI_FROM ? "255,107,107" : "237,179,66"); }
+function tileColour(p) { return p < REAL_BELOW ? "23,128,61" : (p >= AI_FROM ? "196,22,28" : "245,184,0"); }
 function clearMap() {
   const c = $("mapcanvas"); c.width = c.height = 0;
   $("mapbtn").textContent = "Show the suspicion map"; $("mapbtn").disabled = false;
@@ -121,7 +122,7 @@ function drawMap() {
   const tw = w / m.cols, th = h / m.rows, k = w / m.W;
   g.font = "700 12px Figtree, sans-serif"; g.textBaseline = "top";
   for (const t of m.tiles) {
-    const col = tileColour(t.p), a = 0.18 + 0.42 * Math.abs(t.p - 0.5) * 2;
+    const col = tileColour(t.p), a = 0.22 + 0.4 * Math.abs(t.p - 0.5) * 2;
     g.fillStyle = `rgba(${col},${a.toFixed(2)})`; g.fillRect(t.c * tw, t.r * th, tw, th);
     g.strokeStyle = "rgba(255,255,255,.55)"; g.lineWidth = 1; g.strokeRect(t.c * tw + .5, t.r * th + .5, tw - 1, th - 1);
     g.strokeStyle = "#fff"; g.lineWidth = 1.5; g.strokeRect(t.x * k, t.y * k, CROP * k, CROP * k);
@@ -255,14 +256,14 @@ function drawChart(dur) {
   const c = $("vchart"), g = c.getContext("2d"), W = c.width, H = c.height, L = 52, R = 16, T = 14, B = 32;
   g.clearRect(0, 0, W, H);
   const y = (p) => T + (1 - p) * (H - T - B), D = dur || (vPoints.length ? vPoints[vPoints.length - 1].t * 1.05 : 1), x = (t) => L + (t / D) * (W - L - R);
-  [[0, REAL_BELOW, "76,194,122"], [REAL_BELOW, AI_FROM, "237,179,66"], [AI_FROM, 1, "255,107,107"]].forEach(([a, b, col]) => { g.fillStyle = `rgba(${col},.2)`; g.fillRect(L, y(b), W - L - R, y(a) - y(b)); });
-  g.fillStyle = "#A9B8B0"; g.font = "600 15px Figtree, sans-serif"; g.textAlign = "right"; g.textBaseline = "middle";
+  [[0, REAL_BELOW, "23,128,61"], [REAL_BELOW, AI_FROM, "245,184,0"], [AI_FROM, 1, "196,22,28"]].forEach(([a, b, col]) => { g.fillStyle = `rgba(${col},.2)`; g.fillRect(L, y(b), W - L - R, y(a) - y(b)); });
+  g.fillStyle = css("--mute"); g.font = "600 15px Figtree, sans-serif"; g.textAlign = "right"; g.textBaseline = "middle";
   [0, REAL_BELOW, AI_FROM, 1].forEach((p) => g.fillText(pct(p), L - 6, y(p)));
   g.textAlign = "center"; g.textBaseline = "top"; g.fillText("0 s", L, H - B + 8); g.fillText(D.toFixed(0) + " s", W - R - 10, H - B + 8);
   if (!vPoints.length) return;
-  g.strokeStyle = "#F4F1E4"; g.lineWidth = 2; g.beginPath();
+  g.strokeStyle = css("--ink"); g.lineWidth = 2; g.beginPath();
   vPoints.forEach((pt, i) => (i ? g.lineTo(x(pt.t), y(pt.p)) : g.moveTo(x(pt.t), y(pt.p)))); g.stroke();
-  vPoints.forEach((pt) => { g.fillStyle = `rgb(${tileColour(pt.p)})`; g.beginPath(); g.arc(x(pt.t), y(pt.p), 5, 0, 7); g.fill(); g.strokeStyle = "#06121C"; g.lineWidth = 1.5; g.stroke(); });
+  vPoints.forEach((pt) => { g.fillStyle = `rgb(${tileColour(pt.p)})`; g.beginPath(); g.arc(x(pt.t), y(pt.p), 5, 0, 7); g.fill(); g.strokeStyle = css("--ink"); g.lineWidth = 1.5; g.stroke(); });
   c._x = x;
 }
 $("vchart").addEventListener("click", (e) => {
