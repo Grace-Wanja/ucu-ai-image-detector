@@ -82,16 +82,30 @@ function faceVerdict(p) {
   if (p == null || !forgedInfo) return null;
   return p < forgedInfo.zones.real_below ? "real" : (p >= forgedInfo.zones.forged_from ? "forged" : "uncertain");
 }
-// Cut the face the way training did (box plus padding, squashed to size x size) and return P(forged), or null.
-async function scoreFace(bmp, f) {
-  if (!forgedNet) return null;
-  const S = forgedInfo.crop.size, pad = forgedInfo.crop.pad;
-  const x0 = Math.max(0, f.x - pad * f.w), y0 = Math.max(0, f.y - pad * f.h);
-  const x1 = Math.min(bmp.width, f.x + f.w + pad * f.w), y1 = Math.min(bmp.height, f.y + f.h + pad * f.h);
+// Cut the face the way training did and return the S x S canvas.
+// square: a square around the face centre with `pad` extra on each side, black where it falls outside the photo (current model).
+// otherwise: the older box-plus-padding squashed to a square.
+function cropFaceCanvas(bmp, f, S, pad, square) {
   const c = document.createElement("canvas"); c.width = c.height = S;
   const g = c.getContext("2d", { willReadFrequently: true }); g.imageSmoothingQuality = "high";
-  g.drawImage(bmp, x0, y0, x1 - x0, y1 - y0, 0, 0, S, S);
-  const px = g.getImageData(0, 0, S, S).data, N = S * S, data = new Float32Array(3 * N);
+  g.fillStyle = "#000"; g.fillRect(0, 0, S, S);
+  if (!square) {
+    const x0 = Math.max(0, f.x - pad * f.w), y0 = Math.max(0, f.y - pad * f.h);
+    const x1 = Math.min(bmp.width, f.x + f.w + pad * f.w), y1 = Math.min(bmp.height, f.y + f.h + pad * f.h);
+    g.drawImage(bmp, x0, y0, x1 - x0, y1 - y0, 0, 0, S, S); return c;
+  }
+  const cx = f.x + f.w / 2, cy = f.y + f.h / 2, side = Math.max(f.w, f.h) * (1 + 2 * pad);
+  const bx0 = Math.round(cx - side / 2), by0 = Math.round(cy - side / 2), bx1 = Math.round(cx + side / 2), by1 = Math.round(cy + side / 2);
+  const bw = bx1 - bx0, bh = by1 - by0;
+  const sx0 = Math.max(0, bx0), sy0 = Math.max(0, by0), sx1 = Math.min(bmp.width, bx1), sy1 = Math.min(bmp.height, by1);
+  if (sx1 > sx0 && sy1 > sy0) g.drawImage(bmp, sx0, sy0, sx1 - sx0, sy1 - sy0, (sx0 - bx0) * S / bw, (sy0 - by0) * S / bh, (sx1 - sx0) * S / bw, (sy1 - sy0) * S / bh);
+  return c;
+}
+// P(forged) for one face, or null when no face model is published.
+async function scoreFace(bmp, f) {
+  if (!forgedNet) return null;
+  const S = forgedInfo.crop.size, c = cropFaceCanvas(bmp, f, S, forgedInfo.crop.pad, !!forgedInfo.crop.square);
+  const px = c.getContext("2d").getImageData(0, 0, S, S).data, N = S * S, data = new Float32Array(3 * N);
   for (let i = 0; i < N; i++) for (let k = 0; k < 3; k++) data[k * N + i] = (px[i * 4 + k] / 255 - MEAN[k]) / STD[k];
   const out = await enqueue(() => forgedNet.run({ input: new ort.Tensor("float32", data, [1, 3, S, S]) }));
   return sigmoid(out.logit.data[0]);
