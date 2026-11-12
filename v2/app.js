@@ -105,7 +105,7 @@ function renderFacts(f) {
 }
 
 /* ---------------- suspicion map ---------------- */
-function tileColour(p) { return p < REAL_BELOW ? "31,143,118" : (p >= AI_FROM ? "207,74,56" : "242,169,59"); }
+function tileColour(p) { return p < REAL_BELOW ? "76,194,122" : (p >= AI_FROM ? "255,107,107" : "237,179,66"); }
 function clearMap() {
   const c = $("mapcanvas"); c.width = c.height = 0;
   $("mapbtn").textContent = "Show the suspicion map"; $("mapbtn").disabled = false;
@@ -255,14 +255,14 @@ function drawChart(dur) {
   const c = $("vchart"), g = c.getContext("2d"), W = c.width, H = c.height, L = 52, R = 16, T = 14, B = 32;
   g.clearRect(0, 0, W, H);
   const y = (p) => T + (1 - p) * (H - T - B), D = dur || (vPoints.length ? vPoints[vPoints.length - 1].t * 1.05 : 1), x = (t) => L + (t / D) * (W - L - R);
-  [[0, REAL_BELOW, "31,143,118"], [REAL_BELOW, AI_FROM, "242,169,59"], [AI_FROM, 1, "207,74,56"]].forEach(([a, b, col]) => { g.fillStyle = `rgba(${col},.16)`; g.fillRect(L, y(b), W - L - R, y(a) - y(b)); });
-  g.fillStyle = "#52627A"; g.font = "600 15px Figtree, sans-serif"; g.textAlign = "right"; g.textBaseline = "middle";
+  [[0, REAL_BELOW, "76,194,122"], [REAL_BELOW, AI_FROM, "237,179,66"], [AI_FROM, 1, "255,107,107"]].forEach(([a, b, col]) => { g.fillStyle = `rgba(${col},.2)`; g.fillRect(L, y(b), W - L - R, y(a) - y(b)); });
+  g.fillStyle = "#A9B8B0"; g.font = "600 15px Figtree, sans-serif"; g.textAlign = "right"; g.textBaseline = "middle";
   [0, REAL_BELOW, AI_FROM, 1].forEach((p) => g.fillText(pct(p), L - 6, y(p)));
   g.textAlign = "center"; g.textBaseline = "top"; g.fillText("0 s", L, H - B + 8); g.fillText(D.toFixed(0) + " s", W - R - 10, H - B + 8);
   if (!vPoints.length) return;
-  g.strokeStyle = "#0F1E36"; g.lineWidth = 2; g.beginPath();
+  g.strokeStyle = "#F4F1E4"; g.lineWidth = 2; g.beginPath();
   vPoints.forEach((pt, i) => (i ? g.lineTo(x(pt.t), y(pt.p)) : g.moveTo(x(pt.t), y(pt.p)))); g.stroke();
-  vPoints.forEach((pt) => { g.fillStyle = `rgb(${tileColour(pt.p)})`; g.beginPath(); g.arc(x(pt.t), y(pt.p), 5, 0, 7); g.fill(); g.strokeStyle = "#0F1E36"; g.lineWidth = 1.5; g.stroke(); });
+  vPoints.forEach((pt) => { g.fillStyle = `rgb(${tileColour(pt.p)})`; g.beginPath(); g.arc(x(pt.t), y(pt.p), 5, 0, 7); g.fill(); g.strokeStyle = "#06121C"; g.lineWidth = 1.5; g.stroke(); });
   c._x = x;
 }
 $("vchart").addEventListener("click", (e) => {
@@ -309,6 +309,7 @@ window.addEventListener("beforeinstallprompt", (e) => { e.preventDefault(); inst
 $("install").addEventListener("click", async () => { if (!installEvent) return; installEvent.prompt(); await installEvent.userChoice; installEvent = null; $("install").hidden = true; });
 if ("serviceWorker" in navigator && location.protocol === "https:") navigator.serviceWorker.register("sw.js").catch((e) => console.warn(e));
 
+window.addEventListener("hashchange", () => { const v = location.hash.slice(1); if (["photo", "video", "lab", "history", "about"].includes(v)) show(v); });
 /* ---------------- start ---------------- */
 const first = location.hash.slice(1);
 show(["photo", "video", "lab", "history", "about"].includes(first) ? first : "photo");

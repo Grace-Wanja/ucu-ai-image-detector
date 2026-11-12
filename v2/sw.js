@@ -1,5 +1,5 @@
 // Keeps the app shell available offline. The model itself is saved separately by engine.js.
-const SHELL = "mz-shell-v1";
+const SHELL = "mz-shell-v2";
 const FILES = ["./", "index.html", "style.css", "engine.js", "app.js", "batch.js", "manifest.webmanifest", "icon.svg",
   "../ort/ort.wasm.min.js", "../ort/ort-wasm-simd-threaded.mjs", "../ort/ort-wasm-simd-threaded.wasm"];
 self.addEventListener("install", (e) => { e.waitUntil(caches.open(SHELL).then((c) => c.addAll(FILES)).then(() => self.skipWaiting())); });

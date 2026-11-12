@@ -5,20 +5,21 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>MazimaCheck</title>
 <meta name="description" content="Check a photo or video before you trust it. Everything runs on your device.">
-<meta name="theme-color" content="#0F1E36">
+<meta name="theme-color" content="#06231A">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=1">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500..900&family=Bricolage+Grotesque:opsz,wght@12..96,400..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css?v=2">
 </head>
 <body>
 <a class="skip" href="#main">Skip to the app</a>
 
-<nav class="rail" aria-label="Sections">
-  <div class="brand"><img src="icon.svg" alt="" width="34" height="34"><span>MazimaCheck</span></div>
+<header class="top">
+  <a class="brand" href="#photo"><i class="dot"></i>MazimaCheck</a>
+  <nav aria-label="Sections">
   <div class="tabs" role="tablist">
     <button role="tab" data-view="photo" aria-selected="true"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="M4 17l5-4 4 3 3-2 4 3"/></svg><span>Photo</span></button>
     <button role="tab" data-view="video" aria-selected="false"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="13" height="12" rx="2"/><path d="M16 10l5-3v10l-5-3z"/></svg><span>Video</span></button>
@@ -26,33 +27,45 @@
     <button role="tab" data-view="history" aria-selected="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>History</span></button>
     <button role="tab" data-view="about" aria-selected="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></svg><span>About</span></button>
   </div>
-  <div class="railfoot">
-    <button id="install" class="ghost" hidden>Install the app</button>
-    <p id="modelstate" class="state" role="status">Getting the model ready</p>
-    <div class="statebar"><div id="statefill"></div></div>
+  </nav>
+  <div class="topright">
+    <div class="chip"><p id="modelstate" class="state" role="status">Getting the model ready</p><div class="statebar"><div id="statefill"></div></div></div>
+    <button id="install" class="pill gold" hidden>Install app</button>
   </div>
-</nav>
+</header>
 
 <main id="main">
 
 <!-- ============================== PHOTO ============================== -->
 <section id="v-photo" class="view">
-  <div id="p-empty" class="empty">
-    <h1>Check a photo before you trust it</h1>
-    <p class="lede">MazimaCheck estimates whether a photo was made by AI, shows where in the picture its suspicion is highest, and reads what the file says about itself. The photo stays on your device.</p>
-    <div id="drop" class="drop">
-      <div class="dropbtns">
-        <label class="btn primary">Choose a photo<input id="file" type="file" accept="image/*" hidden></label>
-        <label class="btn">Take a photo<input id="cam" type="file" accept="image/*" capture="environment" hidden></label>
-      </div>
-      <p class="hint" id="droptext">You can also drop a photo here or paste one.</p>
+  <div id="p-empty" class="hero">
+    <div class="herotext">
+      <p class="badge"><i></i>Runs on your device. Your photo is never uploaded.</p>
+      <h1><span>Check it</span><span class="outline">before you</span><span class="goldword">share it</span></h1>
+      <p class="lede">MazimaCheck estimates whether a photo or video was made by AI, shows where in the picture its suspicion is highest, and reads what the file says about itself.</p>
     </div>
-    <p id="error" class="error" role="alert" hidden></p>
+    <div id="drop" class="frame drop">
+      <i class="c tl"></i><i class="c tr"></i><i class="c bl"></i><i class="c br"></i>
+      <div class="dropinner">
+        <div class="dropbtns">
+          <label class="pill gold">Choose a photo<input id="file" type="file" accept="image/*" hidden></label>
+          <label class="pill line">Take a photo<input id="cam" type="file" accept="image/*" capture="environment" hidden></label>
+        </div>
+        <p class="hint" id="droptext">You can also drop a photo here or paste one.</p>
+        <p id="error" class="error" role="alert" hidden></p>
+      </div>
+    </div>
+    <dl class="strip">
+      <div><dt>Tested on</dt><dd>941 <small>images</small></dd></div>
+      <div><dt>Verdicts</dt><dd>3 <small>real, uncertain, AI</small></dd></div>
+      <div><dt>Model</dt><dd>ResNet-50 <small>run F</small></dd></div>
+      <div><dt>Built at</dt><dd>UCU <small>Mukono</small></dd></div>
+    </dl>
   </div>
 
   <div id="p-result" class="desk" hidden>
     <div class="tray">
-      <div class="stage" id="stage">
+      <div class="stage frame" id="stage"><i class="c tl"></i><i class="c tr"></i><i class="c bl"></i><i class="c br"></i>
         <img id="preview" alt="The photo you chose">
         <canvas id="mapcanvas" aria-hidden="true"></canvas>
       </div>
@@ -62,8 +75,8 @@
         <div class="ends"><span>0% real</span><span>100% AI</span></div>
       </div>
       <div class="traybar">
-        <button id="mapbtn" class="btn">Show the suspicion map</button>
-        <label class="btn">Check another photo<input id="file2" type="file" accept="image/*" hidden></label>
+        <button id="mapbtn" class="pill line">Show the suspicion map</button>
+        <label class="pill line">Check another photo<input id="file2" type="file" accept="image/*" hidden></label>
         <span id="mapstate" class="hint" role="status"></span>
       </div>
       <p id="maplegend" class="hint" hidden>Each tile is coloured by one 224-pixel sample cut from its centre (the small outlined square). Red tiles are where the model's score is highest. This shows the model's own readings. It is not proof that a part was edited.</p>
@@ -82,23 +95,23 @@
 
       <h2>Has it been online before?</h2>
       <p class="small">A reverse image search can show whether this photo already exists, and where it first appeared. These open in a new tab, and you choose the photo again there.</p>
-      <div class="links"><a class="btn" href="https://lens.google.com/" target="_blank" rel="noopener">Google Lens</a><a class="btn" href="https://tineye.com/" target="_blank" rel="noopener">TinEye</a><a class="btn" href="https://www.bing.com/visualsearch" target="_blank" rel="noopener">Bing Visual Search</a></div>
+      <div class="links"><a class="pill line" href="https://lens.google.com/" target="_blank" rel="noopener">Google Lens</a><a class="pill line" href="https://tineye.com/" target="_blank" rel="noopener">TinEye</a><a class="pill line" href="https://www.bing.com/visualsearch" target="_blank" rel="noopener">Bing Visual Search</a></div>
 
       <h2>Stress test</h2>
       <p class="small">See whether the verdict survives being shrunk and compressed the way chat apps do.</p>
-      <button id="tolab" class="btn">Open this photo in the Lab</button>
+      <button id="tolab" class="pill line">Open this photo in the Lab</button>
     </div>
   </div>
 </section>
 
 <!-- ============================== VIDEO ============================== -->
 <section id="v-video" class="view" hidden>
-  <h1>Check a video</h1>
+  <h1><span>Check a</span><span class="goldword">video</span></h1>
   <p class="lede">MazimaCheck pulls still frames from the clip, scores each one, and draws the score across time so you can see where it rises.</p>
   <p class="caution">First version. The current model learned from fully AI-generated images, not face swaps, and video compression weakens it. Treat the timeline as a pointer for a closer look, not a verdict. A face model is the next thing being trained.</p>
   <div class="dropbtns">
-    <label class="btn primary">Choose a video<input id="vfile" type="file" accept="video/*" hidden></label>
-    <label class="btn">Record a clip<input id="vcam" type="file" accept="video/*" capture="environment" hidden></label>
+    <label class="pill gold">Choose a video<input id="vfile" type="file" accept="video/*" hidden></label>
+    <label class="pill line">Record a clip<input id="vcam" type="file" accept="video/*" capture="environment" hidden></label>
     <label class="inline">Frames to check <select id="vcount"><option>8</option><option selected>16</option><option>32</option></select></label>
   </div>
   <p id="verror" class="error" role="alert" hidden></p>
@@ -106,7 +119,7 @@
     <div class="desk">
       <div class="tray">
         <video id="vplayer" controls playsinline muted></video>
-        <div class="traybar"><span id="vstate" class="hint" role="status"></span><button id="vstop" class="btn" hidden>Stop</button></div>
+        <div class="traybar"><span id="vstate" class="hint" role="status"></span><button id="vstop" class="pill line" hidden>Stop</button></div>
       </div>
       <div class="readings">
         <div class="verdict" id="vverdictbox"><p class="vlabel" id="vverdict">Checking frames</p><p class="vscore"><span id="vscore"></span></p><p class="vwhy" id="vvwhy"></p></div>
@@ -121,7 +134,7 @@
 
 <!-- ============================== LAB ============================== -->
 <section id="v-lab" class="view" hidden>
-  <h1>Lab</h1>
+  <h1><span>The</span><span class="goldword">lab</span></h1>
   <p class="lede">Two tests for people who want to know how far to trust the detector.</p>
 
   <div class="panel">
@@ -129,7 +142,7 @@
     <p>Chat apps shrink and re-compress photos. This test re-saves your photo at five strengths and scores each copy, so you can watch the verdict move. The settings are our approximation of what chat apps do, not their exact recipe.</p>
     <p id="labneed" class="hint">Check a photo in the Photo tab first, then come back here.</p>
     <div id="labgo" hidden>
-      <button id="labrun" class="btn primary">Run the stress test on the current photo</button>
+      <button id="labrun" class="pill gold">Run the stress test on the current photo</button>
       <span id="labstate" class="hint" role="status"></span>
       <div id="labout" class="steps"></div>
       <p id="labsum" class="small"></p>
@@ -140,14 +153,14 @@
     <h2>Batch test</h2>
     <p>For evaluators: score a whole set of photos automatically and get the confusion matrix. Labels are read from a <code>labels.csv</code> (columns <code>filename,label</code>, optional <code>role,generator,p_fake</code>) or from folders named <code>real</code> and <code>ai</code>.</p>
     <div class="dropbtns">
-      <label class="btn">Choose a folder<input id="bfolder" type="file" webkitdirectory multiple hidden></label>
-      <label class="btn">Or choose files, with labels.csv<input id="bfiles" type="file" multiple accept="image/*,.csv" hidden></label>
+      <label class="pill line">Choose a folder<input id="bfolder" type="file" webkitdirectory multiple hidden></label>
+      <label class="pill line">Or choose files, with labels.csv<input id="bfiles" type="file" multiple accept="image/*,.csv" hidden></label>
     </div>
     <p id="bfound" class="hint" hidden></p>
     <div class="brow">
       <label>Check at most <input id="blimit" type="number" min="1" value="1"> images</label>
-      <button id="brun" class="btn primary" disabled>Start</button>
-      <button id="bstop" class="btn" hidden>Stop</button>
+      <button id="brun" class="pill gold" disabled>Start</button>
+      <button id="bstop" class="pill line" hidden>Stop</button>
     </div>
     <div id="bprog" hidden><div class="bar"><div id="bbar"></div></div><p id="btext" class="hint"></p></div>
     <div id="bresults" hidden>
@@ -159,7 +172,7 @@
       <div id="bgroups"></div>
       <p id="bparity" class="small" hidden></p>
       <p id="bunread" class="small" hidden></p>
-      <div class="brow"><label><input id="bwrong" type="checkbox"> Show only wrong or uncertain rows</label><button id="bdl" class="btn">Download all results (CSV)</button></div>
+      <div class="brow"><label><input id="bwrong" type="checkbox"> Show only wrong or uncertain rows</label><button id="bdl" class="pill line">Download all results (CSV)</button></div>
       <div class="tablewrap"><table id="btable" class="rt"></table></div>
       <p id="bmore" class="small"></p>
     </div>
@@ -168,16 +181,16 @@
 
 <!-- ============================== HISTORY ============================== -->
 <section id="v-history" class="view" hidden>
-  <h1>History</h1>
+  <h1><span>Your</span><span class="goldword">history</span></h1>
   <p class="lede">Checks you have run on this device. Nothing here is sent anywhere, and only a small thumbnail is kept.</p>
-  <div class="brow"><button id="hexport" class="btn">Download as CSV</button><button id="hclear" class="btn danger">Clear history</button></div>
+  <div class="brow"><button id="hexport" class="pill line">Download as CSV</button><button id="hclear" class="pill line danger">Clear history</button></div>
   <p id="hempty" class="hint">No checks yet. Your first photo or video check will appear here.</p>
   <div id="hlist" class="hlist"></div>
 </section>
 
 <!-- ============================== ABOUT ============================== -->
 <section id="v-about" class="view" hidden>
-  <h1>How it works, and how far to trust it</h1>
+  <h1><span>How far</span><span class="outline">to trust it</span></h1>
   <p class="lede">MazimaCheck is a student research project from Uganda Christian University. It asks how well AI-image detectors hold up on photos like the ones Ugandans share.</p>
 
   <div class="panel">
@@ -219,7 +232,7 @@
 
 <script src="../ort/ort.wasm.min.js"></script>
 <script src="engine.js?v=1"></script>
-<script src="app.js?v=1"></script>
+<script src="app.js?v=2"></script>
 <script src="batch.js?v=1"></script>
 </body>
 </html>
