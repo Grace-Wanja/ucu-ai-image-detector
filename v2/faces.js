@@ -72,11 +72,28 @@ async function loadForged() {
   const m = await cachedGet(new URL("faces/forged_manifest.json", document.baseURI).href);
   if (!m) return;                                                           // no model published yet: no per-face verdict
   forgedInfo = await m.json();
-  const url = new URL("faces/" + forgedInfo.onnx, document.baseURI).href;
+  const names = forgedInfo.parts || [forgedInfo.onnx];
+  const key = new URL("faces/glued-" + (forgedInfo.run || names.join("+")), document.baseURI).href;   // where the joined model is kept on this device
   const store = ("caches" in window) ? await caches.open("mz-model").catch(() => null) : null;
-  let r = store ? await store.match(url) : null;
-  if (!r) { r = await fetch(url); if (!r.ok) throw new Error("forged-face model download failed"); if (store) store.put(url, r.clone()).catch(() => {}); }
-  forgedNet = await ort.InferenceSession.create(new Uint8Array(await r.arrayBuffer()), { executionProviders: ["wasm"] });
+  let bytes = null, hit = store ? await store.match(key) : null;
+  if (hit) bytes = new Uint8Array(await hit.arrayBuffer());
+  else {
+    const chunks = [];
+    for (const n of names) {
+      const r = await fetch(new URL("faces/" + n, document.baseURI).href);
+      if (!r.ok) throw new Error("forged-face model part missing: " + n);
+      chunks.push(new Uint8Array(await r.arrayBuffer()));
+    }
+    bytes = new Uint8Array(chunks.reduce((t, c) => t + c.length, 0));
+    let at = 0; for (const c of chunks) { bytes.set(c, at); at += c.length; }
+    if (forgedInfo.bytes && bytes.length !== forgedInfo.bytes) throw new Error("forged-face model is the wrong size: parts are missing or mixed up");
+    if (forgedInfo.sha256 && crypto.subtle) {
+      const h = Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256", bytes))).map((x) => x.toString(16).padStart(2, "0")).join("");
+      if (h !== forgedInfo.sha256) throw new Error("forged-face model failed its checksum");
+    }
+    if (store) store.put(key, new Response(bytes)).catch(() => {});
+  }
+  forgedNet = await ort.InferenceSession.create(bytes, { executionProviders: ["wasm"] });
 }
 function faceVerdict(p) {
   if (p == null || !forgedInfo) return null;
