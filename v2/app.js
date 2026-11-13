@@ -121,7 +121,7 @@ function renderFaces() {
   const nf = faces.length === 1 ? "face" : "faces";
   if (forgedNet) {
     const v = faces.map((f) => faceVerdict(f.p)), bad = v.filter((x) => x === "forged").length, unsure = v.filter((x) => x === "uncertain").length;
-    $("facetext").textContent = `${faces.length} ${nf} found. ${bad} matched the face-swap pattern this model was trained on, ${unsure} uncertain. Read this with care: on fakes made by other methods the face model did no better than guessing in our test, so a face marked as real is not cleared. See About.` + (faces.length > 12 ? " Only the first 12 were scored." : "");
+    $("facetext").textContent = `${faces.length} ${nf} found. ${bad} matched the face-swap pattern this model was trained on, ${unsure} uncertain. This check recognises one style of face swap. Other kinds of fake can pass it, so a clear result is not proof.` + (faces.length > 12 ? " Only the first 12 were scored." : "");
   } else $("facetext").textContent = `${faces.length} ${nf} found. A face-level forgery check is still being trained, so these faces do not have their own score yet.`;
   const shown = faces.slice(0, 12);
   $("facelist").innerHTML = shown.map((f, i) => `<figure class="face"><img src="${faceCrop(current.bmp, f)}" alt="Face ${i + 1}"><b>Face ${i + 1}</b><br>${Math.round(f.w)} x ${Math.round(f.h)} px${Math.min(f.w, f.h) < 64 ? ", small" : ""}${faceChip(f)}</figure>`).join("") + (faces.length > shown.length ? `<p class="small">Showing the first ${shown.length}. All ${faces.length} are boxed on the photo.</p>` : "");
@@ -378,3 +378,18 @@ const first = location.hash.slice(1);
 show(["photo", "video", "lab", "history", "about"].includes(first) ? first : "photo");
 startModel();
 window.__mz = { onPhoto, onVideo, runLab, toggleMap, get current() { return current; }, get vPoints() { return vPoints; }, ready: () => modelReady };
+
+// landing: cards that open the photo picker, and the verdict reader
+document.querySelectorAll("[data-go=pick]").forEach((b) => b.addEventListener("click", () => $("file").click()));
+(function () {
+  const band = document.querySelector(".rband"); if (!band) return;
+  const pin = $("rpin"), tabs = [...band.querySelectorAll(".z")];
+  function pick(t) {
+    tabs.forEach((x) => x.setAttribute("aria-selected", x === t));
+    document.querySelectorAll(".rtext [data-for]").forEach((d) => (d.hidden = d.dataset.for !== t.dataset.z));
+    pin.style.left = t.offsetLeft + t.offsetWidth / 2 + "px";
+  }
+  tabs.forEach((t) => t.addEventListener("click", () => pick(t)));
+  const again = () => pick(tabs.find((x) => x.getAttribute("aria-selected") === "true"));
+  addEventListener("resize", again); addEventListener("hashchange", () => setTimeout(again, 50)); setTimeout(again, 300);
+})();

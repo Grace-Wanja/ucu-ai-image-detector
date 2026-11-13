@@ -4,4 +4,4 @@ Check a photo or video before you trust it. MazimaCheck estimates whether an ima
 
 Live at https://mazimacheck.dev (new version at /v2/).
 
-It is in active development. The About page lists measured accuracy and the known limits.
+The How it works page explains the verdicts and how to read them.

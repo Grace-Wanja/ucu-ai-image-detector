@@ -5,14 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>MazimaCheck</title>
 <meta name="description" content="Check a photo or video before you trust it. Everything runs on your device.">
-<meta name="theme-color" content="#05081A">
+<meta name="theme-color" content="#FFFFFF">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=6">
+<link rel="stylesheet" href="style.css?v=7">
 </head>
 <body>
 <a class="skip" href="#main">Skip to the app</a>
@@ -56,65 +56,69 @@
       </div>
     </div>
    </div>
-    <dl class="strip">
-      <div><dt>Tested on</dt><dd>941 <small>images</small></dd></div>
-      <div><dt>Verdicts</dt><dd>3 <small>real, uncertain, AI</small></dd></div>
-      <div><dt>Privacy</dt><dd>On device <small>nothing uploaded</small></dd></div>
-      <div><dt>Offline</dt><dd>Yes <small>after first load</small></dd></div>
-    </dl>
-  
+    <div class="ticker" aria-hidden="true"><div class="run"><span>Photo check</span><span>Suspicion map</span><span>Face finder</span><span>Video timeline</span><span>Chat-app stress test</span><span>Batch test</span><span>Works offline</span><span>Nothing uploaded</span><span>Photo check</span><span>Suspicion map</span><span>Face finder</span><span>Video timeline</span><span>Chat-app stress test</span><span>Batch test</span><span>Works offline</span><span>Nothing uploaded</span></div></div>
+
     <section class="how" aria-labelledby="howh">
-      <h2 id="howh" class="shout">What MazimaCheck does</h2>
+      <h2 id="howh" class="shout">Everything it checks</h2>
+      <p class="sub">Pick one to try it.</p>
       <div class="cards">
-        <article class="card">
-          <svg viewBox="0 0 160 100" role="img" aria-label="A photo with five sample squares: the centre and four corners"><rect width="160" height="100" rx="8" fill="#0B1230"/><rect x="22" y="12" width="116" height="76" rx="4" fill="#16204A"/><g fill="none" stroke="#E9B449" stroke-width="2.5"><rect x="26" y="16" width="26" height="26"/><rect x="108" y="16" width="26" height="26"/><rect x="26" y="58" width="26" height="26"/><rect x="108" y="58" width="26" height="26"/><rect x="67" y="37" width="26" height="26"/></g></svg>
-          <h3>Reads the fine detail</h3>
-          <p>Five full-sharpness samples are cut from your photo and scored. It is never shrunk first, because shrinking erases the traces AI generators leave.</p>
-        </article>
-        <article class="card">
-          <svg viewBox="0 0 160 100" role="img" aria-label="A grid of tiles from green to red"><rect width="160" height="100" rx="8" fill="#0B1230"/><g><rect x="14" y="12" width="15" height="13" rx="2" fill="#0E7A2B" opacity="0.9"/><rect x="31" y="12" width="15" height="13" rx="2" fill="#91C73D" opacity="0.75"/><rect x="48" y="12" width="15" height="13" rx="2" fill="#E9B449" opacity="0.6"/><rect x="65" y="12" width="15" height="13" rx="2" fill="#0E7A2B" opacity="0.9"/><rect x="82" y="12" width="15" height="13" rx="2" fill="#91C73D" opacity="0.75"/><rect x="99" y="12" width="15" height="13" rx="2" fill="#E9B449" opacity="0.6"/><rect x="116" y="12" width="15" height="13" rx="2" fill="#0E7A2B" opacity="0.9"/><rect x="133" y="12" width="15" height="13" rx="2" fill="#91C73D" opacity="0.75"/><rect x="14" y="27" width="15" height="13" rx="2" fill="#E9B449" opacity="0.75"/><rect x="31" y="27" width="15" height="13" rx="2" fill="#0E7A2B" opacity="0.6"/><rect x="48" y="27" width="15" height="13" rx="2" fill="#E9B449" opacity="0.9"/><rect x="65" y="27" width="15" height="13" rx="2" fill="#E9B449" opacity="0.75"/><rect x="82" y="27" width="15" height="13" rx="2" fill="#0E7A2B" opacity="0.6"/><rect x="99" y="27" width="15" height="13" rx="2" fill="#E9B449" opacity="0.9"/><rect x="116" y="27" width="15" height="13" rx="2" fill="#E9B449" opacity="0.75"/><rect x="133" y="27" width="15" height="13" rx="2" fill="#0E7A2B" opacity="0.6"/><rect x="14" y="42" width="15" height="13" rx="2" fill="#0E7A2B" opacity="0.6"/><rect x="31" y="42" width="15" height="13" rx="2" fill="#E9B449" opacity="0.9"/><rect x="48" y="42" width="15" height="13" rx="2" fill="#C4161C" opacity="0.75"/><rect x="65" y="42" width="15" height="13" rx="2" fill="#0E7A2B" opacity="0.6"/><rect x="82" y="42" width="15" height="13" rx="2" fill="#E9B449" opacity="0.9"/><rect x="99" y="42" width="15" height="13" rx="2" fill="#C4161C" opacity="0.75"/><rect x="116" y="42" width="15" height="13" rx="2" fill="#0E7A2B" opacity="0.6"/><rect x="133" y="42" width="15" height="13" rx="2" fill="#E9B449" opacity="0.9"/><rect x="14" y="57" width="15" height="13" rx="2" fill="#E9B449" opacity="0.9"/><rect x="31" y="57" width="15" height="13" rx="2" fill="#C4161C" opacity="0.75"/><rect x="48" y="57" width="15" height="13" rx="2" fill="#0E7A2B" opacity="0.6"/><rect x="65" y="57" width="15" height="13" rx="2" fill="#E9B449" opacity="0.9"/><rect x="82" y="57" width="15" height="13" rx="2" fill="#C4161C" opacity="0.75"/><rect x="99" y="57" width="15" height="13" rx="2" fill="#0E7A2B" opacity="0.6"/><rect x="116" y="57" width="15" height="13" rx="2" fill="#E9B449" opacity="0.9"/><rect x="133" y="57" width="15" height="13" rx="2" fill="#C4161C" opacity="0.75"/><rect x="14" y="72" width="15" height="13" rx="2" fill="#0E7A2B" opacity="0.75"/><rect x="31" y="72" width="15" height="13" rx="2" fill="#E9B449" opacity="0.6"/><rect x="48" y="72" width="15" height="13" rx="2" fill="#0E7A2B" opacity="0.9"/><rect x="65" y="72" width="15" height="13" rx="2" fill="#0E7A2B" opacity="0.75"/><rect x="82" y="72" width="15" height="13" rx="2" fill="#E9B449" opacity="0.6"/><rect x="99" y="72" width="15" height="13" rx="2" fill="#0E7A2B" opacity="0.9"/><rect x="116" y="72" width="15" height="13" rx="2" fill="#0E7A2B" opacity="0.75"/><rect x="133" y="72" width="15" height="13" rx="2" fill="#E9B449" opacity="0.6"/></g></svg>
-          <h3>Shows where it looks suspicious</h3>
-          <p>A suspicion map scores a grid of samples across the whole photo, so you can see which areas drive the verdict.</p>
-        </article>
-        <article class="card">
-          <svg viewBox="0 0 160 100" role="img" aria-label="Two faces with boxes drawn around them"><rect width="160" height="100" rx="8" fill="#0B1230"/><g fill="#16204A"><circle cx="58" cy="50" r="19"/><circle cx="108" cy="46" r="15"/></g><g fill="none" stroke-width="2.5"><rect x="34" y="26" width="48" height="48" stroke="#91C73D"/><rect x="88" y="30" width="40" height="40" stroke="#E9B449"/></g><g fill="#FAE89E"><circle cx="51" cy="47" r="2.5"/><circle cx="65" cy="47" r="2.5"/><circle cx="102" cy="43" r="2.2"/><circle cx="114" cy="43" r="2.2"/></g></svg>
-          <h3>Checks every face</h3>
-          <p>Faces are found and boxed on the photo, and each one gets its own check for face-swap patterns.</p>
-        </article>
-        <article class="card">
-          <svg viewBox="0 0 160 100" role="img" aria-label="The same photo shown at five shrinking sizes"><rect width="160" height="100" rx="8" fill="#0B1230"/><g fill="#16204A" stroke="#E9B449" stroke-width="2"><rect x="12" y="22" width="44" height="56"/><rect x="62" y="30" width="36" height="46" opacity=".85"/><rect x="104" y="38" width="28" height="36" opacity=".7"/><rect x="136" y="46" width="14" height="26" opacity=".55"/></g></svg>
-          <h3>Tests it against chat apps</h3>
-          <p>Shrink and compress your photo the way messaging apps do, and watch whether the verdict holds.</p>
-        </article>
+        <button type="button" class="card" data-go="pick">
+          <svg class="art a-samples" viewBox="0 0 160 100" aria-hidden="true"><rect width="160" height="100" rx="8" fill="#E6F2E8"/><rect x="22" y="12" width="116" height="76" rx="4" fill="#fff" stroke="#BFD9C4"/><g fill="none" stroke="#0E7A2B" stroke-width="2.5"><rect x="26" y="16" width="26" height="26"/><rect x="108" y="16" width="26" height="26"/><rect x="67" y="37" width="26" height="26"/><rect x="26" y="58" width="26" height="26"/><rect x="108" y="58" width="26" height="26"/></g></svg>
+          <h3>AI photo check</h3>
+          <p>Five full-sharpness samples of your photo are scored, giving one clear verdict: likely real, uncertain, or likely AI.</p>
+          <span class="go">Check a photo</span>
+        </button>
+        <button type="button" class="card" data-go="pick">
+          <svg class="art a-map" viewBox="0 0 160 100" aria-hidden="true"><rect width="160" height="100" rx="8" fill="#E6F2E8"/><g><rect class="t0" x="14" y="12" width="15" height="13" rx="2" fill="#0E7A2B"/><rect class="t1" x="31" y="12" width="15" height="13" rx="2" fill="#91C73D"/><rect class="t2" x="48" y="12" width="15" height="13" rx="2" fill="#E9B449"/><rect class="t3" x="65" y="12" width="15" height="13" rx="2" fill="#0E7A2B"/><rect class="t0" x="82" y="12" width="15" height="13" rx="2" fill="#91C73D"/><rect class="t1" x="99" y="12" width="15" height="13" rx="2" fill="#E9B449"/><rect class="t2" x="116" y="12" width="15" height="13" rx="2" fill="#0E7A2B"/><rect class="t3" x="133" y="12" width="15" height="13" rx="2" fill="#91C73D"/><rect class="t3" x="14" y="27" width="15" height="13" rx="2" fill="#E9B449"/><rect class="t0" x="31" y="27" width="15" height="13" rx="2" fill="#0E7A2B"/><rect class="t1" x="48" y="27" width="15" height="13" rx="2" fill="#E9B449"/><rect class="t2" x="65" y="27" width="15" height="13" rx="2" fill="#E9B449"/><rect class="t3" x="82" y="27" width="15" height="13" rx="2" fill="#0E7A2B"/><rect class="t0" x="99" y="27" width="15" height="13" rx="2" fill="#E9B449"/><rect class="t1" x="116" y="27" width="15" height="13" rx="2" fill="#E9B449"/><rect class="t2" x="133" y="27" width="15" height="13" rx="2" fill="#0E7A2B"/><rect class="t2" x="14" y="42" width="15" height="13" rx="2" fill="#0E7A2B"/><rect class="t3" x="31" y="42" width="15" height="13" rx="2" fill="#E9B449"/><rect class="t0" x="48" y="42" width="15" height="13" rx="2" fill="#C4161C"/><rect class="t1" x="65" y="42" width="15" height="13" rx="2" fill="#0E7A2B"/><rect class="t2" x="82" y="42" width="15" height="13" rx="2" fill="#E9B449"/><rect class="t3" x="99" y="42" width="15" height="13" rx="2" fill="#C4161C"/><rect class="t0" x="116" y="42" width="15" height="13" rx="2" fill="#0E7A2B"/><rect class="t1" x="133" y="42" width="15" height="13" rx="2" fill="#E9B449"/><rect class="t1" x="14" y="57" width="15" height="13" rx="2" fill="#E9B449"/><rect class="t2" x="31" y="57" width="15" height="13" rx="2" fill="#C4161C"/><rect class="t3" x="48" y="57" width="15" height="13" rx="2" fill="#0E7A2B"/><rect class="t0" x="65" y="57" width="15" height="13" rx="2" fill="#E9B449"/><rect class="t1" x="82" y="57" width="15" height="13" rx="2" fill="#C4161C"/><rect class="t2" x="99" y="57" width="15" height="13" rx="2" fill="#0E7A2B"/><rect class="t3" x="116" y="57" width="15" height="13" rx="2" fill="#E9B449"/><rect class="t0" x="133" y="57" width="15" height="13" rx="2" fill="#C4161C"/><rect class="t0" x="14" y="72" width="15" height="13" rx="2" fill="#0E7A2B"/><rect class="t1" x="31" y="72" width="15" height="13" rx="2" fill="#E9B449"/><rect class="t2" x="48" y="72" width="15" height="13" rx="2" fill="#0E7A2B"/><rect class="t3" x="65" y="72" width="15" height="13" rx="2" fill="#0E7A2B"/><rect class="t0" x="82" y="72" width="15" height="13" rx="2" fill="#E9B449"/><rect class="t1" x="99" y="72" width="15" height="13" rx="2" fill="#0E7A2B"/><rect class="t2" x="116" y="72" width="15" height="13" rx="2" fill="#0E7A2B"/><rect class="t3" x="133" y="72" width="15" height="13" rx="2" fill="#E9B449"/></g></svg>
+          <h3>Suspicion map</h3>
+          <p>See which parts of the photo push the score up, tile by tile.</p>
+          <span class="go">Try it on a photo</span>
+        </button>
+        <button type="button" class="card" data-go="pick">
+          <svg class="art a-face" viewBox="0 0 160 100" aria-hidden="true"><rect width="160" height="100" rx="8" fill="#E6F2E8"/><g fill="#BFD9C4"><circle cx="58" cy="50" r="19"/><circle cx="108" cy="46" r="15"/></g><g fill="#0B0F1F"><circle cx="51" cy="47" r="2.5"/><circle cx="65" cy="47" r="2.5"/><circle cx="102" cy="43" r="2.2"/><circle cx="114" cy="43" r="2.2"/></g><g fill="none" stroke-width="3"><rect class="bx" x="34" y="26" width="48" height="48" stroke="#0E7A2B" pathLength="100"/><rect class="bx b2" x="88" y="30" width="40" height="40" stroke="#C98A12" pathLength="100"/></g></svg>
+          <h3>Face finder</h3>
+          <p>Every face is boxed on the photo and gets its own check for face-swap patterns.</p>
+          <span class="go">Find faces in a photo</span>
+        </button>
+        <a class="card" href="#video">
+          <svg class="art a-video" viewBox="0 0 160 100" aria-hidden="true"><rect width="160" height="100" rx="8" fill="#E6F2E8"/><path d="M14 70 L36 62 L58 66 L80 40 L102 48 L124 26 L146 34" fill="none" stroke="#0E7A2B" stroke-width="3" stroke-linejoin="round"/><path d="M14 84h132" stroke="#BFD9C4" stroke-width="2"/><g class="head"><path d="M0 14v72" stroke="#C98A12" stroke-width="2.5"/><circle cy="14" r="5" fill="#C98A12"/></g></svg>
+          <h3>Video timeline</h3>
+          <p>Frames are pulled from a clip and scored, so you can see where the score rises and jump straight there.</p>
+          <span class="go">Check a video</span>
+        </a>
+        <a class="card" href="#lab">
+          <svg class="art a-stress" viewBox="0 0 160 100" aria-hidden="true"><rect width="160" height="100" rx="8" fill="#E6F2E8"/><g fill="#fff" stroke="#0E7A2B" stroke-width="2.5"><rect class="s1" x="12" y="22" width="44" height="56"/><rect class="s2" x="62" y="30" width="36" height="46"/><rect class="s3" x="104" y="38" width="28" height="36"/><rect class="s4" x="138" y="46" width="14" height="26"/></g></svg>
+          <h3>Chat-app stress test</h3>
+          <p>Shrink and compress a photo the way messaging apps do, and watch whether the verdict holds.</p>
+          <span class="go">Open the Lab</span>
+        </a>
+        <a class="card" href="#history">
+          <svg class="art a-priv" viewBox="0 0 160 100" aria-hidden="true"><rect width="160" height="100" rx="8" fill="#E6F2E8"/><rect x="58" y="12" width="44" height="76" rx="7" fill="#fff" stroke="#0E7A2B" stroke-width="2.5"/><path class="tick" d="M68 50l9 9 16-18" fill="none" stroke="#C98A12" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" pathLength="100"/><g class="waves" fill="none" stroke="#BFD9C4" stroke-width="2.5" stroke-linecap="round"><path d="M40 36q-8 14 0 28"/><path d="M120 36q8 14 0 28"/></g></svg>
+          <h3>Private, and works offline</h3>
+          <p>Photos never leave your device. Your past checks are kept on it too, and the app runs without internet after the first load.</p>
+          <span class="go">See your history</span>
+        </a>
       </div>
     </section>
 
-    <section class="honest" aria-labelledby="honh">
-      <h2 id="honh" class="shout">Honest about where it stands</h2>
-      <div class="two">
-        <div class="panel plain">
-          <h3>What you get today</h3>
-          <ul>
-            <li>A verdict in three zones, each tied to what we measured on test images</li>
-            <li>A suspicion map showing where the score is highest</li>
-            <li>Face boxes and a check for each face</li>
-            <li>A chat-app stress test and a batch test for evaluators</li>
-            <li>Private by design: nothing leaves your device, and it works offline after the first load</li>
-          </ul>
+    <section class="read" aria-labelledby="readh">
+      <h2 id="readh" class="shout">How to read a verdict</h2>
+      <p class="sub">Tap a zone on the scale.</p>
+      <div class="reader">
+        <div class="rband" role="tablist" aria-label="Verdict zones">
+          <button role="tab" class="z zr1" data-z="real" aria-selected="true">Likely real</button>
+          <button role="tab" class="z zu1" data-z="unsure" aria-selected="false">Uncertain</button>
+          <button role="tab" class="z za1" data-z="ai" aria-selected="false">Likely AI</button>
+          <i id="rpin"></i>
         </div>
-        <div class="panel plain work">
-          <h3>What we are working on</h3>
-          <ul>
-            <li><b>Catching more AI images.</b> The photo check missed 38% of AI images in our tests.</li>
-            <li><b>Shrunk and re-sent photos.</b> Size and compression can move the score.</li>
-            <li><b>More kinds of fake face.</b> A retrained face check that has seen more fake types caught 43 to 65% of types it had never met. It is the next release.</li>
-            <li><b>Video.</b> The first version is out and has not been evaluated yet.</li>
-            <li><b>More Ugandan photos</b> in testing.</li>
-          </ul>
+        <div class="rtext" aria-live="polite">
+          <div data-for="real"><h3>Likely real</h3><p>AI score below <span class="zr">45%</span>. On our 941 test images, 79% of photos that scored here were real.</p></div>
+          <div data-for="unsure" hidden><h3>Uncertain</h3><p>AI score from <span class="zr">45%</span> to under <span class="za">65%</span>. The model is close to a coin toss in this range, so MazimaCheck tells you so and points you to a reverse image search.</p></div>
+          <div data-for="ai" hidden><h3>Likely AI-generated</h3><p>AI score of <span class="za">65%</span> and above. On our 941 test images, 81% of photos that scored here were AI-generated.</p></div>
         </div>
       </div>
-      <p class="small">It is a screening aid, not proof. <a href="#about">See the full test results and limits.</a></p>
     </section>
+
 
   </div>
 
@@ -170,7 +174,7 @@
   <h1>Check a <span class="mark">video</span></h1>
   <p class="lede">MazimaCheck pulls still frames from the clip, scores each one, and draws the score across time so you can see where it rises.</p>
   </div>
-  <p class="caution">First version. The photo model learned from fully AI-generated images, not face swaps, and video compression weakens it. Faces are checked separately. Treat the timeline as a pointer for a closer look, not a verdict.</p>
+  <p class="caution">Each frame is scored by the photo model, and faces are checked separately. Video compression weakens the signal, so use the timeline to find moments worth a closer look.</p>
   <div class="dropbtns">
     <label class="pill gold">Choose a video<input id="vfile" type="file" accept="video/*" hidden></label>
     <label class="inline">Frames to check <select id="vcount"><option>8</option><option selected>16</option><option>32</option></select></label>
@@ -256,8 +260,8 @@
 <!-- ============================== ABOUT ============================== -->
 <section id="v-about" class="view" hidden>
   <div class="hband">
-  <h1>How far to <span class="mark">trust it</span></h1>
-  <p class="lede">MazimaCheck helps you check photos and videos before you share or believe them. It is in active development. This page says plainly how well it works today and what we are fixing.</p>
+  <h1>How it <span class="mark">works</span></h1>
+  <p class="lede">MazimaCheck helps you check photos and videos before you share or believe them. Here is how it reaches a verdict and how to read one.</p>
   </div>
 
   <div class="panel">
@@ -284,42 +288,29 @@
   </div>
 
   <div class="panel">
-    <h2>Face checks: what we measured</h2>
-    <p>MazimaCheck finds faces with a small open face finder, cuts each one out and scores it with a second network trained on OpenForensics, a public set of face-swap photos. On that set it scores about 99%, and we checked that none of its test photos had a near-copy in training. Then we tried faces made in other ways, using 300 images of each from the public DeepFakeFace set:</p>
-    <table class="zt">
-      <thead><tr><th>Group</th><th>Called forged</th><th>Separation from real (AUC)</th></tr></thead>
-      <tbody>
-        <tr><td>Real celebrity photos</td><td>8% (false alarms)</td><td>not applicable</td></tr>
-        <tr><td>Face swap (InsightFace)</td><td>5%</td><td>0.46</td></tr>
-        <tr><td>Stable Diffusion inpainting</td><td>6%</td><td>0.47</td></tr>
-        <tr><td>Stable Diffusion text-to-image</td><td>9%</td><td>0.52</td></tr>
-      </tbody>
-    </table>
-    <p class="small">An AUC of 0.5 means no better than guessing. So the current face check recognises the swaps it was trained on and little else, and we show its result as a pattern match, never as proof that a face is real. We then retrained it on OpenForensics plus two of the three DeepFakeFace types and tested it on the third, held out each time. It caught 43% of unseen face swaps, 65% of unseen inpainting and 45% of unseen text-to-image faces, with 6 to 10% false alarms and AUC between 0.78 and 0.88. That retrained check is the next release.</p>
+    <h2>How faces are checked</h2>
+    <p>A compact face finder locates every face and boxes it on the photo. Each face is cut out as a square and scored by a second network trained on OpenForensics, a public set of real and face-swapped photos. It recognises that style of face swap. Faces made with other tools can pass it, so a clear face result is not proof on its own.</p>
   </div>
 
   <div class="panel">
-    <h2>Known limits, and what we are doing about them</h2>
+    <h2>Good to know</h2>
     <ul>
-      <li>It misses AI images often: 38% of AI test images were called real, and 47% of those shared on Reddit.</li>
-      <li>Image size and compression move the score. On our own photos taken in Uganda, shrinking a real photo changed its score by up to 19 points.</li>
-      <li>Regular textures such as brick walls can be flagged as AI.</li>
-      <li>The face check in this version only recognises the face swaps it was trained on. The retrained version described above is next.</li>
-      <li>Our test photos are mostly public and online sources. We are adding more photos taken and shared in Uganda to see how the results change.</li>
-      <li>The video check is a first version and has not been evaluated yet.</li>
-      <li>It is a screening aid, not proof. Check anything important with a second source.</li>
+      <li>MazimaCheck is a screening aid, not proof. Check anything important with a second source, such as a reverse image search.</li>
+      <li>Heavily shrunk or re-compressed photos are harder to judge. The Lab shows how much a photo's score moves.</li>
+      <li>Regular textures such as brick walls can raise the score.</li>
+      <li>Some AI images score as real, which is why the uncertain zone and the suspicion map are there.</li>
     </ul>
   </div>
 </section>
 
 </main>
 
-<footer class="foot"><div><b>MazimaCheck</b><p>Made in Uganda, for anyone who shares photos online. In active development: every result comes with the test numbers behind it.</p></div><nav aria-label="Footer"><a href="#photo">Photo</a><a href="#video">Video</a><a href="#lab">Lab</a><a href="#about">About</a></nav></footer>
+<footer class="foot"><div><b>MazimaCheck</b><p>Check it before you share it. Made in Uganda, for anyone who shares photos online.</p></div><nav aria-label="Footer"><a href="#photo">Photo</a><a href="#video">Video</a><a href="#lab">Lab</a><a href="#history">History</a><a href="#about">How it works</a></nav></footer>
 
 <script src="../ort/ort.wasm.min.js"></script>
 <script src="engine.js?v=2"></script>
 <script src="faces.js?v=4"></script>
-<script src="app.js?v=7"></script>
+<script src="app.js?v=8"></script>
 <script src="batch.js?v=1"></script>
 </body>
 </html>
