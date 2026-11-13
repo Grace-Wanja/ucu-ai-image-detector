@@ -89,6 +89,11 @@ function renderPhoto() {
   $("vwhy").textContent = r.label === "real" ? `Scores below ${pct(REAL_BELOW)} were real 79% of the time in our tests.`
     : r.label === "AI-generated" ? `Scores of ${pct(AI_FROM)} and above were AI 81% of the time in our tests.`
     : "In this range the model was right barely more often than a coin toss.";
+  $("vmeans").innerHTML = `<b>What this means.</b> ${{
+    "real": "The model found no strong sign that this photo was made by AI. That does not guarantee it is genuine, because some AI images score here too. If it matters, run a reverse image search below.",
+    "uncertain": "The model cannot tell. Treat this as no answer. Look at the suspicion map, run a reverse image search below, and try to find where the photo first appeared.",
+    "AI-generated": "The model found strong signs of AI generation, but that is not proof: about 1 in 5 photos that scored here were real. Find the original source before you share it."
+  }[r.label]} <a href="#about">How to read a verdict</a>`;
   $("pin").style.left = (100 * r.p) + "%"; $("pinval").textContent = (100 * r.p).toFixed(0) + "%";
   $("notes").innerHTML = r.notes.map((n) => `<li>${esc(n)}</li>`).join("");
   renderFaces();
@@ -392,4 +397,11 @@ document.querySelectorAll("[data-go=pick]").forEach((b) => b.addEventListener("c
   tabs.forEach((t) => t.addEventListener("click", () => pick(t)));
   const again = () => pick(tabs.find((x) => x.getAttribute("aria-selected") === "true"));
   addEventListener("resize", again); new ResizeObserver(again).observe(band);
+})();
+
+// the result page has no headline band, so the header gets its own band-coloured background there
+(function () {
+  const sync = () => document.body.classList.toggle("res", !$("p-result").hidden && !$("v-photo").hidden);
+  const mo = new MutationObserver(sync);
+  mo.observe($("p-result"), { attributes: true, attributeFilter: ["hidden"] }); mo.observe($("v-photo"), { attributes: true, attributeFilter: ["hidden"] }); sync();
 })();

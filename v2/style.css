@@ -108,8 +108,8 @@ input[type=number]{width:6em}
 .traybar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:14px}
 
 .gauge{margin:22px 4px 4px;padding-top:36px}
-.band{position:relative;height:16px;display:flex}
-.band i{display:block;height:100%}
+.band{position:relative;height:24px;display:flex}
+.band i{display:flex;align-items:center;justify-content:center;height:100%;font:800 .62rem var(--display);letter-spacing:.05em;text-transform:uppercase;color:#fff;white-space:nowrap;overflow:hidden;font-style:normal}#zunsure{color:var(--deep)}
 #zreal{background:var(--real);border-radius:8px 0 0 8px}#zunsure{background:var(--gold)}#zai{background:var(--ai);border-radius:0 8px 8px 0}
 #pin{position:absolute;top:-10px;bottom:-10px;width:4px;margin-left:-2px;background:var(--ink);border-radius:2px;left:0;transition:left .5s cubic-bezier(.2,.8,.2,1)}
 #pinval{position:absolute;bottom:100%;left:50%;transform:translateX(-50%);margin-bottom:5px;background:var(--ink);color:var(--bg);font:800 .95rem var(--mono);padding:2px 9px;border-radius:6px;text-decoration:none;white-space:nowrap}
@@ -234,3 +234,7 @@ input[type=number]{width:6em}
 @media (prefers-reduced-motion:reduce){.drop::after,.art *{animation:none!important}.card,.z,#rpin{transition:none}}
 
 .panelwrap{margin-top:0;margin-bottom:26px}.small-shout{font-size:clamp(1.3rem,2.4vw,1.8rem)}
+
+.means{margin:14px 0 0;padding:14px 16px;background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--gold);border-radius:8px;max-width:52ch;font-size:.97rem}.means b{font-family:var(--display)}.means a{color:var(--green);font-weight:700;white-space:nowrap}
+
+body.res .top{position:relative;background:linear-gradient(112deg,#1B6B3D 0%,#10502F 34%,#0B3426 58%,#08172A 82%,#060B20 100%)}
