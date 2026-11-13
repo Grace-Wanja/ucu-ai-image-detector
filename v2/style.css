@@ -185,3 +185,28 @@ input[type=number]{width:6em}
 }
 
 .frames small{display:block;font-weight:500}
+
+/* ---------- landing sections and footer ---------- */
+.shout{font:900 clamp(1.6rem,3.2vw,2.4rem)/1 var(--display);letter-spacing:-.01em;text-transform:uppercase;margin:0 0 22px}
+.how,.honest{margin-top:clamp(40px,7vw,84px)}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px}
+.card{background:var(--panel);border:1px solid var(--line);border-top:5px solid var(--gold);border-radius:10px;padding:14px 14px 20px}
+.card svg{display:block;width:100%;height:auto;margin-bottom:14px}
+.card h3{font:800 1.1rem/1.2 var(--display);margin:0 0 6px}
+.card p{margin:0;color:var(--mute);font-size:.96rem}
+.honest .two{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px}
+.panel.plain{margin:0;max-width:none}
+.panel.plain h3{font:800 1.15rem var(--display);margin:0 0 8px}
+.panel.plain ul{margin:0;padding-left:20px}
+.panel.plain li{margin:8px 0}
+.panel.work{background:var(--deep);border-color:var(--deep);color:#fff}
+.panel.work h3{color:var(--pale)}
+.panel.work li::marker{color:var(--gold)}
+.honest>.small{margin-top:16px}
+.foot{display:flex;flex-wrap:wrap;gap:20px 48px;justify-content:space-between;align-items:flex-start;background:var(--deep);color:rgba(255,255,255,.8);padding:34px max(var(--pad),calc(50vw - 720px + var(--pad))) 40px;margin-top:20px}
+.foot b{font:900 1.2rem var(--display);color:#fff}
+.foot p{margin:6px 0 0;max-width:46ch;font-size:.95rem}
+.foot nav{display:flex;gap:22px;flex-wrap:wrap}
+.foot a{color:var(--pale);text-decoration:none;font:500 .9rem var(--body)}
+.foot a:hover{text-decoration:underline}
+@media (max-width:900px){.foot{padding-bottom:110px}}
