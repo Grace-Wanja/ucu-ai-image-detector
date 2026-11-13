@@ -121,16 +121,16 @@ function renderFaces() {
   const nf = faces.length === 1 ? "face" : "faces";
   if (forgedNet) {
     const v = faces.map((f) => faceVerdict(f.p)), bad = v.filter((x) => x === "forged").length, unsure = v.filter((x) => x === "uncertain").length;
-    $("facetext").textContent = `${faces.length} ${nf} found. ${bad} read as likely forged, ${unsure} uncertain. This face model learned from one dataset, so treat each score as a pointer for a closer look, not proof.` + (faces.length > 12 ? " Only the first 12 were scored." : "");
+    $("facetext").textContent = `${faces.length} ${nf} found. ${bad} matched the face-swap pattern this model was trained on, ${unsure} uncertain. Read this with care: on fakes made by other methods the face model did no better than guessing in our test, so a face marked as real is not cleared. See About.` + (faces.length > 12 ? " Only the first 12 were scored." : "");
   } else $("facetext").textContent = `${faces.length} ${nf} found. A face-level forgery check is still being trained, so these faces do not have their own score yet.`;
   const shown = faces.slice(0, 12);
   $("facelist").innerHTML = shown.map((f, i) => `<figure class="face"><img src="${faceCrop(current.bmp, f)}" alt="Face ${i + 1}"><b>Face ${i + 1}</b><br>${Math.round(f.w)} x ${Math.round(f.h)} px${Math.min(f.w, f.h) < 64 ? ", small" : ""}${faceChip(f)}</figure>`).join("") + (faces.length > shown.length ? `<p class="small">Showing the first ${shown.length}. All ${faces.length} are boxed on the photo.</p>` : "");
   drawFaces();
 }
-const FACECOL = { real: "#17803D", forged: "#C4161C", uncertain: "#F5B800" };
+const FACECOL = { real: "#0E7A2B", forged: "#C4161C", uncertain: "#E9B449" };
 function faceChip(f) {
   const v = faceVerdict(f.p); if (!v) return "";
-  return `<br><span class="tag ${{ real: "real", forged: "ai", uncertain: "unsure" }[v]}">${{ real: "Likely real", forged: "Likely forged", uncertain: "Uncertain" }[v]} ${(100 * f.p).toFixed(0)}%</span>`;
+  return `<br><span class="tag ${{ real: "real", forged: "ai", uncertain: "unsure" }[v]}">${{ real: "No swap pattern", forged: "Swap pattern", uncertain: "Uncertain" }[v]} ${(100 * f.p).toFixed(0)}%</span>`;
 }
 function drawFaces() {
   const faces = current && current.faces, img = $("preview");
@@ -303,7 +303,7 @@ async function onVideo(file) {
     const withFaces = vPoints.filter((x) => x.faces > 0).length, most = Math.max(...vPoints.map((x) => x.faces));
     $("vvwhy").textContent = `${hot} of ${ps.length} frames read as likely AI. Highest frame ${(100 * Math.max(...ps)).toFixed(0)}%, lowest ${(100 * Math.min(...ps)).toFixed(0)}%. ` +
       (faceSession ? (withFaces ? `Faces were found in ${withFaces} of ${ps.length} frames (up to ${most} at once).` : "No faces were found in these frames.") : "") +
-      (forgedNet && withFaces ? ` A face read as likely forged in ${vPoints.filter((x) => x.worst != null && faceVerdict(x.worst) === "forged").length} frames.` : "");
+      (forgedNet && withFaces ? ` A face matched the swap pattern in ${vPoints.filter((x) => x.worst != null && faceVerdict(x.worst) === "forged").length} frames.` : "");
     $("vstate").textContent = run === vRun ? "Done" : "Stopped";
     saveHistory({ kind: "video", name: file.name || "recorded clip", p: mean, verdict: v, w: video.videoWidth, h: video.videoHeight, thumb: vPoints[Math.floor(vPoints.length / 2)].thumb });
   } catch (e) {

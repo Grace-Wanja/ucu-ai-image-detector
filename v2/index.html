@@ -5,14 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>MazimaCheck</title>
 <meta name="description" content="Check a photo or video before you trust it. Everything runs on your device.">
-<meta name="theme-color" content="#0d5c2e">
+<meta name="theme-color" content="#05081A">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=4">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css?v=5">
 </head>
 <body>
 <a class="skip" href="#main">Skip to the app</a>
@@ -230,11 +230,27 @@
   </div>
 
   <div class="panel">
+    <h2>Face checks: where they fail</h2>
+    <p>MazimaCheck finds faces with a small open face finder, cuts each one out and scores it with a second network trained on OpenForensics, a public set of face-swap photos. On that set it scores about 99%, and we checked that none of its test photos had a near-copy in training. Then we tried faces made in other ways, using 300 images of each from the public DeepFakeFace set:</p>
+    <table class="zt">
+      <thead><tr><th>Group</th><th>Called forged</th><th>Separation from real (AUC)</th></tr></thead>
+      <tbody>
+        <tr><td>Real celebrity photos</td><td>8% (false alarms)</td><td>not applicable</td></tr>
+        <tr><td>Face swap (InsightFace)</td><td>5%</td><td>0.46</td></tr>
+        <tr><td>Stable Diffusion inpainting</td><td>6%</td><td>0.47</td></tr>
+        <tr><td>Stable Diffusion text-to-image</td><td>9%</td><td>0.52</td></tr>
+      </tbody>
+    </table>
+    <p class="small">An AUC of 0.5 means no better than guessing. So the face check recognises the swaps it was trained on and little else. We show its result as a pattern match, never as proof that a face is real.</p>
+  </div>
+
+  <div class="panel">
     <h2>Known limits</h2>
     <ul>
       <li>It misses AI images often: 38% of AI test images were called real, and 47% of those shared on Reddit.</li>
       <li>Image size and compression move the score. On our campus photos, shrinking a real photo changed its score by up to 19 points.</li>
       <li>Regular textures such as brick walls can be flagged as AI.</li>
+      <li>The face check has only been shown to work on the face swaps it was trained on (see above).</li>
       <li>The video check is a first version and has not been evaluated yet.</li>
       <li>It is a screening aid, not proof. Check anything important with a second source.</li>
     </ul>
@@ -246,7 +262,7 @@
 <script src="../ort/ort.wasm.min.js"></script>
 <script src="engine.js?v=2"></script>
 <script src="faces.js?v=4"></script>
-<script src="app.js?v=6"></script>
+<script src="app.js?v=7"></script>
 <script src="batch.js?v=1"></script>
 </body>
 </html>
