@@ -1,0 +1,21 @@
+{
+ "run": "resnet18-44699063",
+ "model": "resnet18",
+ "parts": [
+  "resnet18_part1.bin",
+  "resnet18_part2.bin",
+  "resnet18_part3.bin"
+ ],
+ "bytes": 44699063,
+ "sha256": "831eff540db90f5ad35deda72a5933a81b96483b71b09cb2c186f898d36725b1",
+ "threshold": 0.4799999999999999,
+ "crop": {
+  "size": 224,
+  "pad": 0.2,
+  "square": true
+ },
+ "zones": {
+  "real_below": 0.38,
+  "forged_from": 0.58
+ }
+}
