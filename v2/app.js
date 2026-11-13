@@ -391,5 +391,5 @@ document.querySelectorAll("[data-go=pick]").forEach((b) => b.addEventListener("c
   }
   tabs.forEach((t) => t.addEventListener("click", () => pick(t)));
   const again = () => pick(tabs.find((x) => x.getAttribute("aria-selected") === "true"));
-  addEventListener("resize", again); addEventListener("hashchange", () => setTimeout(again, 50)); setTimeout(again, 300);
+  addEventListener("resize", again); new ResizeObserver(again).observe(band);
 })();

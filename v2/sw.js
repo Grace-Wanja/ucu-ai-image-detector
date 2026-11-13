@@ -1,5 +1,5 @@
 // Keeps the app shell available offline. The scoring model is saved separately by engine.js (Cache Storage "mz-model").
-const SHELL = "mz-shell-v9";
+const SHELL = "mz-shell-v10";
 const FILES = ["./", "index.html", "style.css", "engine.js", "faces.js", "app.js", "batch.js", "manifest.webmanifest", "icon.svg", "icon-192.png", "icon-512.png",
   "faces/yunet.onnx", "../ort/ort.wasm.min.js", "../ort/ort-wasm-simd-threaded.mjs", "../ort/ort-wasm-simd-threaded.wasm"];
 self.addEventListener("install", (e) => { e.waitUntil(caches.open(SHELL).then((c) => c.addAll(FILES)).then(() => self.skipWaiting())); });

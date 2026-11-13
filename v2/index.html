@@ -5,14 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>MazimaCheck</title>
 <meta name="description" content="Check a photo or video before you trust it. Everything runs on your device.">
-<meta name="theme-color" content="#FFFFFF">
+<meta name="theme-color" content="#10502F">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=8">
+<link rel="stylesheet" href="style.css?v=9">
 </head>
 <body>
 <a class="skip" href="#main">Skip to the app</a>
@@ -56,9 +56,7 @@
       </div>
     </div>
    </div>
-    <div class="ticker" aria-hidden="true"><div class="run"><span>Photo check</span><span>Suspicion map</span><span>Face finder</span><span>Video timeline</span><span>Chat-app stress test</span><span>Batch test</span><span>Works offline</span><span>Nothing uploaded</span><span>Photo check</span><span>Suspicion map</span><span>Face finder</span><span>Video timeline</span><span>Chat-app stress test</span><span>Batch test</span><span>Works offline</span><span>Nothing uploaded</span></div></div>
-
-    <section class="how" aria-labelledby="howh">
+        <section class="how" aria-labelledby="howh">
       <h2 id="howh" class="shout">Everything it checks</h2>
       <p class="sub">Pick one to try it.</p>
       <div class="cards">
@@ -92,32 +90,16 @@
           <p>Shrink and compress a photo the way messaging apps do, and watch whether the verdict holds.</p>
           <span class="go">Open the Lab</span>
         </a>
-        <a class="card" href="#history">
+        <a class="card" href="#about">
           <svg class="art a-priv" viewBox="0 0 160 100" aria-hidden="true"><rect width="160" height="100" rx="8" fill="#DCEBDD"/><rect x="58" y="12" width="44" height="76" rx="7" fill="#fff" stroke="#0E7A2B" stroke-width="2.5"/><path class="tick" d="M68 50l9 9 16-18" fill="none" stroke="#C98A12" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" pathLength="100"/><g class="waves" fill="none" stroke="#B3CDB8" stroke-width="2.5" stroke-linecap="round"><path d="M40 36q-8 14 0 28"/><path d="M120 36q8 14 0 28"/></g></svg>
           <h3>Private, and works offline</h3>
           <p>Photos never leave your device. Your past checks are kept on it too, and the app runs without internet after the first load.</p>
-          <span class="go">See your history</span>
+          <span class="go">How it works</span>
         </a>
       </div>
     </section>
 
-    <section class="read" aria-labelledby="readh">
-      <h2 id="readh" class="shout">How to read a verdict</h2>
-      <p class="sub">Tap a zone on the scale.</p>
-      <div class="reader">
-        <div class="rband" role="tablist" aria-label="Verdict zones">
-          <button role="tab" class="z zr1" data-z="real" aria-selected="true">Likely real</button>
-          <button role="tab" class="z zu1" data-z="unsure" aria-selected="false">Uncertain</button>
-          <button role="tab" class="z za1" data-z="ai" aria-selected="false">Likely AI</button>
-          <i id="rpin"></i>
-        </div>
-        <div class="rtext" aria-live="polite">
-          <div data-for="real"><h3>Likely real</h3><p>AI score below <span class="zr">45%</span>. On our 941 test images, 79% of photos that scored here were real.</p></div>
-          <div data-for="unsure" hidden><h3>Uncertain</h3><p>AI score from <span class="zr">45%</span> to under <span class="za">65%</span>. The model is close to a coin toss in this range, so MazimaCheck tells you so and points you to a reverse image search.</p></div>
-          <div data-for="ai" hidden><h3>Likely AI-generated</h3><p>AI score of <span class="za">65%</span> and above. On our 941 test images, 81% of photos that scored here were AI-generated.</p></div>
-        </div>
-      </div>
-    </section>
+
 
 
   </div>
@@ -264,6 +246,25 @@
   <p class="lede">MazimaCheck helps you check photos and videos before you share or believe them. Here is how it reaches a verdict and how to read one.</p>
   </div>
 
+    <section class="read panelwrap" aria-labelledby="readh">
+      <h2 id="readh" class="shout small-shout">How to read a verdict</h2>
+      <p class="sub">Tap a zone on the scale.</p>
+      <div class="reader">
+        <div class="rband" role="tablist" aria-label="Verdict zones">
+          <button role="tab" class="z zr1" data-z="real" aria-selected="true">Likely real</button>
+          <button role="tab" class="z zu1" data-z="unsure" aria-selected="false">Uncertain</button>
+          <button role="tab" class="z za1" data-z="ai" aria-selected="false">Likely AI</button>
+          <i id="rpin"></i>
+        </div>
+        <div class="rtext" aria-live="polite">
+          <div data-for="real"><h3>Likely real</h3><p>AI score below <span class="zr">45%</span>. On our 941 test images, 79% of photos that scored here were real.</p></div>
+          <div data-for="unsure" hidden><h3>Uncertain</h3><p>AI score from <span class="zr">45%</span> to under <span class="za">65%</span>. The model is close to a coin toss in this range, so MazimaCheck tells you so and points you to a reverse image search.</p></div>
+          <div data-for="ai" hidden><h3>Likely AI-generated</h3><p>AI score of <span class="za">65%</span> and above. On our 941 test images, 81% of photos that scored here were AI-generated.</p></div>
+        </div>
+      </div>
+    </section>
+
+
   <div class="panel">
     <h2>Reading the score</h2>
     <table class="zt">
@@ -310,7 +311,7 @@
 <script src="../ort/ort.wasm.min.js"></script>
 <script src="engine.js?v=2"></script>
 <script src="faces.js?v=4"></script>
-<script src="app.js?v=8"></script>
+<script src="app.js?v=10"></script>
 <script src="batch.js?v=1"></script>
 </body>
 </html>
